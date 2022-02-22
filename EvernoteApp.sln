@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32210.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfUI", "WpfUI\WpfUI.csproj", "{0F6B331A-9DC7-464E-A494-1ECEE66242F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{D3024D29-C708-4DF4-8066-D0154749C154}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F6B331A-9DC7-464E-A494-1ECEE66242F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F6B331A-9DC7-464E-A494-1ECEE66242F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F6B331A-9DC7-464E-A494-1ECEE66242F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F6B331A-9DC7-464E-A494-1ECEE66242F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3024D29-C708-4DF4-8066-D0154749C154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3024D29-C708-4DF4-8066-D0154749C154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3024D29-C708-4DF4-8066-D0154749C154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3024D29-C708-4DF4-8066-D0154749C154}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B12001F7-8459-4C5C-9867-53E9C1F67B2B}
+	EndGlobalSection
+EndGlobal
