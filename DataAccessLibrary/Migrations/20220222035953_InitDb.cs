@@ -32,7 +32,7 @@ namespace DataAccessLibrary.Migrations
                     NotebookId = table.Column<int>(type: "INTEGER", nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    IpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     FileLocation = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>

@@ -29,13 +29,13 @@ namespace DataAccessLibrary.Migrations
                     b.Property<string>("FileLocation")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("IpdatedAt")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("NotebookId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

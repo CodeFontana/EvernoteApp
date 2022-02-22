@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLibrary.Migrations
 {
     [DbContext(typeof(NotesDbContext))]
-    [Migration("20220222001620_InitDb")]
+    [Migration("20220222035953_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,13 +31,13 @@ namespace DataAccessLibrary.Migrations
                     b.Property<string>("FileLocation")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("IpdatedAt")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("NotebookId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
