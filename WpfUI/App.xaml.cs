@@ -7,6 +7,8 @@ using Serilog;
 using System;
 using System.IO;
 using System.Windows;
+using WpfUI.ViewModels;
+using WpfUI.Views;
 
 namespace WpfUI
 {
@@ -38,8 +40,10 @@ namespace WpfUI
 						{
 							options.UseSqlite("Data Source=Notes.db;");
 						});
-						//services.AddSingleton<MainWindowViewModel>();
-						services.AddSingleton<MainWindow>();
+						services.AddSingleton<LoginWindow>();
+						services.AddSingleton<NotesWindow>();
+						services.AddSingleton<LoginViewModel>();
+						services.AddSingleton<NotesViewModel>();
 					})
 					.UseSerilog((context, services, loggerConfiguration) =>
 						loggerConfiguration.ReadFrom.Configuration(context.Configuration))
@@ -47,9 +51,9 @@ namespace WpfUI
 
 				await _appHost.StartAsync();
 				
-				var appWindow = _appHost.Services.GetService<MainWindow>();
-				//appWindow.DataContext = _appHost.Services.GetService<MainWindowViewModel>();
-				appWindow.Show();
+				var notesWindow = _appHost.Services.GetService<NotesWindow>();
+				notesWindow.DataContext = _appHost.Services.GetService<NotesViewModel>();
+				notesWindow.Show();
 			}
 			catch (Exception ex)
 			{
