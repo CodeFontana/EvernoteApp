@@ -355,3 +355,5 @@ FiAgent.WixInstaller/ComponentsGenerated.wxs
 
 # SQLite files
 *.db
+*.db-shm
+*.db-wal
