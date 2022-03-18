@@ -1,18 +1,14 @@
-﻿<Window x:Class="WpfUI.Views.NotesWindow"
+﻿<Window x:Class="WpfUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfUI.Views"
-        xmlns:vm="clr-namespace:WpfUI.ViewModels"
+        xmlns:local="clr-namespace:WpfUI"
+        xmlns:vms="clr-namespace:WpfUI.ViewModels"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800">
     
-    <Window.Resources>
-        <vm:NotesViewModel x:Key="vm" />
-    </Window.Resources>
-    
-    <DockPanel DataContext="{StaticResource vm}">
+    <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="New notebook" 
@@ -26,6 +22,24 @@
             </MenuItem>
         </Menu>
         <Grid>
+            <Grid.Resources>
+                <!--<DataTemplate DataType="{x:Type vms:HelloWorldViewModel}">
+                    <views:HelloWorldView />
+                </DataTemplate>-->
+            </Grid.Resources>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <ContentControl Grid.Row="0" 
+                        Grid.Column="0" 
+                        Margin="0 0 0 0"
+                        Content="{Binding CurrentViewModel}" />
 
         </Grid>
     </DockPanel>

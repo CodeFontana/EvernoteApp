@@ -1,17 +1,16 @@
-﻿namespace DataAccessLibrary.Entities
+﻿namespace DataAccessLibrary.Entities;
+
+public class Note
 {
-    public class Note
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public int NotebookId { get; set; }
+    public int NotebookId { get; set; }
 
-        public string Title { get; set; }
+    public string Title { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
-        public string FileLocation { get; set; }
-    }
+    public string FileLocation { get; set; }
 }

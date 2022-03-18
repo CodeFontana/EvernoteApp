@@ -1,21 +1,24 @@
 ﻿using DataAccessLibrary.Entities;
+using DataAccessLibrary.Notes;
 using System;
 using System.Collections.ObjectModel;
-using WpfUI.ViewModels.Commands;
+using WpfUI.Commands;
 
 namespace WpfUI.ViewModels
 {
     public class NotesViewModel
     {
-        public NotesViewModel()
+        private readonly NotesDbContext _dbContext;
+        private Notebook _selectedNotebook;
+
+        public NotesViewModel(NotesDbContext dbContext)
         {
             NewNotebookCommand = new(this);
             NewNoteCommand = new(this);
+            _dbContext = dbContext;
         }
 
         public ObservableCollection<Notebook> Notebooks { get; set; }
-
-        private Notebook _selectedNotebook;
 
         public Notebook SelectedNotebook
         {
@@ -29,6 +32,16 @@ namespace WpfUI.ViewModels
 
         public NewNoteCommand NewNoteCommand { get; set; }
 
+        public void CreateNotebook()
+        {
+            Notebook notebook = new()
+            {
+                Name = "New notebook"
+            };
+
+            _dbContext.Notebooks.Add(notebook);
+        }
+
         public void CreateNote(int notebookId)
         {
             Note newNote = new()
@@ -38,6 +51,8 @@ namespace WpfUI.ViewModels
                 UpdatedAt = DateTime.Now,
                 Title = "New note"
             };
+
+            _dbContext.Notes.Add(newNote);
         }
     }
 }

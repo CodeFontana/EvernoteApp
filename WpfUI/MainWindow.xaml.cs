@@ -12,14 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace WpfUI.Views
+namespace WpfUI
 {
-    /// <summary>
-    /// Interaction logic for NotesWindow.xaml
-    /// </summary>
-    public partial class NotesWindow : Window
+    public partial class MainWindow : Window
     {
-        public NotesWindow()
+        public MainWindow()
         {
             InitializeComponent();
         }
