@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
 
-public class NewNotebookCommand : CommandBase
+public class NewNotebookCommand : CommandBaseAsync
 {
     private readonly NotesViewModel _notesViewModel;
 
@@ -13,8 +14,8 @@ public class NewNotebookCommand : CommandBase
         _notesViewModel = notesViewModel;
     }
 
-    public override void Execute(object parameter)
+    public override async Task ExecuteAsync(object parameter)
     {
-        _notesViewModel.CreateNotebook();
+        await _notesViewModel.CreateNotebook();
     }
 }

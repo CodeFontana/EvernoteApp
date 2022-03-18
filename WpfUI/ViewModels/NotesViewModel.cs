@@ -2,6 +2,7 @@
 using DataAccessLibrary.Notes;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using WpfUI.Commands;
 
 namespace WpfUI.ViewModels
@@ -32,17 +33,18 @@ namespace WpfUI.ViewModels
 
         public NewNoteCommand NewNoteCommand { get; set; }
 
-        public void CreateNotebook()
+        public async Task CreateNotebook()
         {
             Notebook notebook = new()
             {
                 Name = "New notebook"
             };
 
-            _dbContext.Notebooks.Add(notebook);
+            await _dbContext.Notebooks.AddAsync(notebook);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void CreateNote(int notebookId)
+        public async Task CreateNote(int notebookId)
         {
             Note newNote = new()
             {
@@ -52,7 +54,8 @@ namespace WpfUI.ViewModels
                 Title = "New note"
             };
 
-            _dbContext.Notes.Add(newNote);
+            await _dbContext.Notes.AddAsync(newNote);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
