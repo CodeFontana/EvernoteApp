@@ -34,6 +34,10 @@ public partial class App : Application
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddDbContext<NotesDbContext>(options =>
+                    {
+                        options.UseSqlite("Data Source=Notes.db;");
+                    });
                     services.AddSingleton<NavigationStore>();
                     services.AddSingleton<MainViewModel>();
                     services.AddSingleton(s => new MainWindow()
