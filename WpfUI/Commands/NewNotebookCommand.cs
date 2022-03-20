@@ -7,15 +7,15 @@ namespace WpfUI.Commands;
 
 public class NewNotebookCommand : CommandBaseAsync
 {
-    private readonly NotesViewModel _notesViewModel;
+    private readonly MainViewModel _mainViewModel;
 
-    public NewNotebookCommand(NotesViewModel notesViewModel)
+    public NewNotebookCommand(MainViewModel mainViewModel)
     {
-        _notesViewModel = notesViewModel;
+        _mainViewModel = mainViewModel;
     }
 
     public override async Task ExecuteAsync(object parameter)
     {
-        await _notesViewModel.CreateNotebook();
+        await _mainViewModel.CreateNotebook();
     }
 }
