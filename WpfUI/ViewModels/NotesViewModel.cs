@@ -14,6 +14,11 @@ public class NotesViewModel : ViewModelBase
     private readonly IServiceScopeFactory _scopeFactory;
     private Notebook _selectedNotebook;
 
+    public NotesViewModel()
+    {
+        // Parameterless default constructor -- for design time
+    }
+
     public NotesViewModel(IServiceScopeFactory scopeFactory)
     {
         _scopeFactory = scopeFactory;
