@@ -72,7 +72,7 @@ public partial class App : Application
     protected override async void OnStartup(StartupEventArgs e)
     {
         await _appHost.StartAsync();
-        NavigationService<LoginViewModel> navService = _appHost.Services.GetRequiredService<NavigationService<LoginViewModel>>();
+        NavigationService<NotesViewModel> navService = _appHost.Services.GetRequiredService<NavigationService<NotesViewModel>>();
         navService.Navigate();
         MainWindow mainWindow = _appHost.Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
