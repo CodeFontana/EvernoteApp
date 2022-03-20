@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using WpfUI.Commands;
 
 namespace WpfUI.ViewModels;
@@ -16,8 +17,8 @@ public class NotesViewModel : ViewModelBase
     public NotesViewModel(IServiceScopeFactory scopeFactory)
     {
         _scopeFactory = scopeFactory;
-        NewNotebookCommand = new(this);
-        NewNoteCommand = new(this);
+        NewNotebookCommand = new NewNotebookCommand(this);
+        NewNoteCommand = new NewNoteCommand(this);
     }
 
     public ObservableCollection<Notebook> Notebooks { get; set; }
@@ -30,9 +31,9 @@ public class NotesViewModel : ViewModelBase
 
     public ObservableCollection<Note> Notes { get; set; }
 
-    public NewNotebookCommand NewNotebookCommand { get; set; }
+    public ICommand NewNotebookCommand { get; set; }
 
-    public NewNoteCommand NewNoteCommand { get; set; }
+    public ICommand NewNoteCommand { get; set; }
 
     public async Task CreateNotebook()
     {
