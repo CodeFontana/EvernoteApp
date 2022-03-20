@@ -10,15 +10,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfUI
+namespace WpfUI.Views;
+/// <summary>
+/// Interaction logic for NotesView.xaml
+/// </summary>
+public partial class NotesView : UserControl
 {
-    public partial class MainWindow : Window
+    public NotesView()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
+
+    private void MenuItem_Click(object sender, RoutedEventArgs e)
+    {
+        Application.Current.Shutdown();
     }
 }

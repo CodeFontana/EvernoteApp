@@ -5,42 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfUI"
         xmlns:vms="clr-namespace:WpfUI.ViewModels"
+        xmlns:views="clr-namespace:WpfUI.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    
-    <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="File">
-                <MenuItem Header="New notebook" 
-                          Command="{Binding NewNotebookCommand}"/>
-                <MenuItem Header="New note" 
-                          Command="{Binding NewNoteCommand}"
-                          CommandParameter="{Binding SelectedNotebook}"/>
-                <Separator />
-                <MenuItem Header="Exit" 
-                          Click="MenuItem_Click"/>
-            </MenuItem>
-        </Menu>
-        <Grid>
-            <Grid.Resources>
-                <!--<DataTemplate DataType="{x:Type vms:HelloWorldViewModel}">
-                    <views:HelloWorldView />
-                </DataTemplate>-->
-            </Grid.Resources>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
+    <Grid>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type vms:LoginViewModel}">
+                <views:LoginView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:NotesViewModel}">
+                <views:NotesView />
+            </DataTemplate>
+        </Grid.Resources>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-            </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
 
-            <ContentControl Grid.Row="0" 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+
+        <ContentControl Grid.Row="0" 
                         Grid.Column="0" 
                         Margin="0 0 0 0"
                         Content="{Binding CurrentViewModel}" />
 
-        </Grid>
-    </DockPanel>
+    </Grid>
 </Window>

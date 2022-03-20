@@ -7,6 +7,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Windows;
+using WpfUI.Services;
 using WpfUI.Stores;
 using WpfUI.ViewModels;
 
@@ -38,7 +39,13 @@ public partial class App : Application
                     {
                         options.UseSqlite($@"Data Source={Environment.CurrentDirectory}\Notes.db;");
                     });
+                    services.AddTransient<LoginViewModel>();
+                    services.AddTransient<NotesViewModel>();
                     services.AddSingleton<NavigationStore>();
+                    services.AddSingleton<NavigationService<LoginViewModel>>();
+                    services.AddSingleton<NavigationService<NotesViewModel>>();
+                    services.AddSingleton<Func<LoginViewModel>>((s) => () => s.GetRequiredService<LoginViewModel>());
+                    services.AddSingleton<Func<NotesViewModel>>((s) => () => s.GetRequiredService<NotesViewModel>());
                     services.AddSingleton<MainViewModel>();
                     services.AddSingleton(s => new MainWindow()
                     {
@@ -65,6 +72,8 @@ public partial class App : Application
     protected override async void OnStartup(StartupEventArgs e)
     {
         await _appHost.StartAsync();
+        NavigationService<LoginViewModel> navService = _appHost.Services.GetRequiredService<NavigationService<LoginViewModel>>();
+        navService.Navigate();
         MainWindow mainWindow = _appHost.Services.GetRequiredService<MainWindow>();
         mainWindow.Show();
         base.OnStartup(e);

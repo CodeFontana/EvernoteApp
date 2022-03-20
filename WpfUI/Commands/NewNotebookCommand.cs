@@ -1,21 +1,19 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Threading.Tasks;
 using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
 
 public class NewNotebookCommand : CommandBaseAsync
 {
-    private readonly MainViewModel _mainViewModel;
+    private readonly NotesViewModel _notesViewModel;
 
-    public NewNotebookCommand(MainViewModel mainViewModel)
+    public NewNotebookCommand(NotesViewModel notesViewModel)
     {
-        _mainViewModel = mainViewModel;
+        _notesViewModel = notesViewModel;
     }
 
     public override async Task ExecuteAsync(object parameter)
     {
-        await _mainViewModel.CreateNotebook();
+        await _notesViewModel.CreateNotebook();
     }
 }

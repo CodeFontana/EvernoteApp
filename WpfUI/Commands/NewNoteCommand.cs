@@ -1,18 +1,16 @@
 ﻿using DataAccessLibrary.Entities;
-using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
 
 public class NewNoteCommand : CommandBaseAsync
 {
-    private readonly MainViewModel _mainViewModel;
+    private readonly NotesViewModel _notesViewModel;
 
-    public NewNoteCommand(MainViewModel mainViewModel)
+    public NewNoteCommand(NotesViewModel notesViewModel)
     {
-        _mainViewModel = mainViewModel;
+        _notesViewModel = notesViewModel;
     }
 
     public override bool CanExecute(object parameter)
@@ -30,6 +28,6 @@ public class NewNoteCommand : CommandBaseAsync
     public override async Task ExecuteAsync(object parameter)
     {
         Notebook selectedNotebook = parameter as Notebook;
-        await _mainViewModel.CreateNote(selectedNotebook.Id);
+        await _notesViewModel.CreateNote(selectedNotebook.Id);
     }
 }
