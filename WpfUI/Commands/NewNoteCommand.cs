@@ -15,9 +15,7 @@ public class NewNoteCommand : CommandBaseAsync
 
     public override bool CanExecute(object parameter)
     {
-        Notebook selectedNotebook = parameter as Notebook;
-
-        if (selectedNotebook != null)
+        if (parameter is Notebook selectedNotebook)
         {
             return true;
         }
