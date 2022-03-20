@@ -16,11 +16,24 @@
                           CommandParameter="{Binding SelectedNotebook}"/>
                 <Separator />
                 <MenuItem Header="Exit" 
-                          Click="MenuItem_Click"/>
+                          Command="{Binding ExitApplicationCommand}"/>
             </MenuItem>
         </Menu>
+        <ListView DockPanel.Dock="Left"
+                  Width="140">
+            
+        </ListView>
+        <ListView DockPanel.Dock="Left"
+                  Width="140">
+            
+        </ListView>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                
+            </ToolBar>
+        </ToolBarTray>
         <Grid>
-
+            
         </Grid>
     </DockPanel>
 </UserControl>

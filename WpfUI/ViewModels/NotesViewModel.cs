@@ -19,6 +19,7 @@ public class NotesViewModel : ViewModelBase
         _scopeFactory = scopeFactory;
         NewNotebookCommand = new NewNotebookCommand(this);
         NewNoteCommand = new NewNoteCommand(this);
+        ExitApplicationCommand = new ExitApplicationCommand();
     }
 
     public ObservableCollection<Notebook> Notebooks { get; set; }
@@ -34,6 +35,8 @@ public class NotesViewModel : ViewModelBase
     public ICommand NewNotebookCommand { get; set; }
 
     public ICommand NewNoteCommand { get; set; }
+
+    public ICommand ExitApplicationCommand { get; set; }
 
     public async Task CreateNotebook()
     {
