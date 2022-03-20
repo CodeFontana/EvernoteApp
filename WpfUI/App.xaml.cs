@@ -36,7 +36,7 @@ public partial class App : Application
                 {
                     services.AddDbContext<NotesDbContext>(options =>
                     {
-                        options.UseSqlite("Data Source=Notes.db;");
+                        options.UseSqlite($@"Data Source={Environment.CurrentDirectory}\Notes.db;");
                     });
                     services.AddSingleton<NavigationStore>();
                     services.AddSingleton<MainViewModel>();
