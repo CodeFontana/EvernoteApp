@@ -29,21 +29,22 @@
             </StatusBarItem>
         </StatusBar>
         <ListView DockPanel.Dock="Left"
-                  Width="140"
+                  Background="MidnightBlue"
+                  MinWidth="150"
                   SelectedValue="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding Notebooks}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
+                    <custom:NotebookControl Notebook="{Binding}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
         <ListView DockPanel.Dock="Left"
-                  Width="140"
+                  MinWidth="150"
                   ItemsSource="{Binding Notes}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Title}" />
+                    <custom:NoteControl Note="{Binding}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
