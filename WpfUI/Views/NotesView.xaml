@@ -53,6 +53,16 @@
                     <TextBlock Text="B"
                                FontWeight="Bold" />
                 </Button>
+                <Button Command="{Binding ItalicTextCommand}"
+                        CommandParameter="{Binding ElementName=rtbNote}">
+                    <TextBlock Text="I"
+                               FontStyle="Italic" />
+                </Button>
+                <Button Command="{Binding UnderlineTextCommand}"
+                        CommandParameter="{Binding ElementName=rtbNote}">
+                    <TextBlock Text="U"
+                               TextDecorations="Underline" />
+                </Button>
             </ToolBar>
         </ToolBarTray>
         <Grid>

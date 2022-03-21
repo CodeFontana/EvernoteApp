@@ -30,6 +30,8 @@ public class NotesViewModel : ViewModelBase
         ExitApplicationCommand = new ExitApplicationCommand();
         NoteTextChangedCommand = new NoteTextChangedCommand(this);
         BoldTextCommand = new BoldTextCommand(this);
+        ItalicTextCommand = new ItalicTextCommand(this);
+        UnderlineTextCommand = new UnderlineTextCommand(this);
         Notebooks = new();
         Notes = new();
         GetNotebooks();
@@ -88,6 +90,9 @@ public class NotesViewModel : ViewModelBase
     public ICommand NoteTextChangedCommand { get; set; }
 
     public ICommand BoldTextCommand { get; set; }
+    public ICommand ItalicTextCommand { get; set; }
+    public ICommand UnderlineTextCommand { get; set; }
+
 
     public async Task CreateNotebook()
     {
