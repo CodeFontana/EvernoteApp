@@ -18,7 +18,14 @@ public class BoldTextCommand : CommandBase
     {
         if (parameter is RichTextBox rtb)
         {
-            rtb.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+            if ((FontWeight)rtb.Selection.GetPropertyValue(Inline.FontWeightProperty) == FontWeights.Bold)
+            {
+                rtb.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+            }
+            else
+            {
+                rtb.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+            }
         }
     }
 }
