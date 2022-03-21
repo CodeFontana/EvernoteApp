@@ -48,7 +48,8 @@
         </ListView>
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Command="{Binding BoldTextCommand}">
+                <Button Command="{Binding BoldTextCommand}"
+                        CommandParameter="{Binding ElementName=rtbNote}">
                     <TextBlock Text="B"
                                FontWeight="Bold" />
                 </Button>
