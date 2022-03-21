@@ -2,10 +2,12 @@
 using DataAccessLibrary.Notes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 using WpfUI.Commands;
 
 namespace WpfUI.ViewModels;
@@ -13,9 +15,6 @@ namespace WpfUI.ViewModels;
 public class NotesViewModel : ViewModelBase
 {
     private readonly IServiceScopeFactory _scopeFactory;
-    private Notebook _selectedNotebook;
-    private string _currentNoteXaml;
-    private int _currentNoteCharCount;
 
     public NotesViewModel()
     {
@@ -32,6 +31,12 @@ public class NotesViewModel : ViewModelBase
         BoldTextCommand = new BoldTextCommand(this);
         ItalicTextCommand = new ItalicTextCommand(this);
         UnderlineTextCommand = new UnderlineTextCommand(this);
+        FontFamilyChangedCommand = new FontFamilyChangedCommand(this);
+        FontSizeChangedCommand = new FontSizeChangedCommand(this);
+        AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
+        SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Calibri");
+        AvailableFontSizes = Enumerable.Range(6, 72).ToList();
+        SelectedFontSize = 12;
         Notebooks = new();
         Notes = new();
         GetNotebooks();
@@ -39,6 +44,7 @@ public class NotesViewModel : ViewModelBase
 
     public ObservableCollection<Notebook> Notebooks { get; set; }
 
+    private Notebook _selectedNotebook;
     public Notebook SelectedNotebook
     {
         get { return _selectedNotebook; }
@@ -52,6 +58,7 @@ public class NotesViewModel : ViewModelBase
 
     public ObservableCollection<Note> Notes { get; set; }
 
+    private string _currentNoteXaml;
     public string CurrentNoteXaml
     {
         get { return _currentNoteXaml; }
@@ -62,6 +69,7 @@ public class NotesViewModel : ViewModelBase
         }
     }
 
+    private int _currentNoteCharCount;
     public int CurrentNoteCharCount
     {
         get { return _currentNoteCharCount; }
@@ -73,13 +81,39 @@ public class NotesViewModel : ViewModelBase
         }
     }
 
-    
-
     public string CurrentNoteCharCountStatusMessage
     {
         get { return $"Document length: {CurrentNoteCharCount} characters"; }
     }
 
+    public ICollection<FontFamily> AvailableFonts { get; }
+
+    private FontFamily _selectedFont;
+    public FontFamily SelectedFont
+    {
+        get { return _selectedFont; }
+        set 
+        { 
+            _selectedFont = value;
+            OnPropertyChanged(nameof(SelectedFont));
+        }
+    }
+
+    public List<int> AvailableFontSizes { get; set; }
+
+    private int _selectedFontSize;
+    public int SelectedFontSize
+    {
+        get
+        {
+            return _selectedFontSize;
+        }
+        set
+        {
+            _selectedFontSize = value;
+            OnPropertyChanged(nameof(SelectedFontSize));
+        }
+    }
 
     public ICommand NewNotebookCommand { get; set; }
 
@@ -92,7 +126,8 @@ public class NotesViewModel : ViewModelBase
     public ICommand BoldTextCommand { get; set; }
     public ICommand ItalicTextCommand { get; set; }
     public ICommand UnderlineTextCommand { get; set; }
-
+    public ICommand FontFamilyChangedCommand { get; set; }
+    public ICommand FontSizeChangedCommand { get; set; }
 
     public async Task CreateNotebook()
     {

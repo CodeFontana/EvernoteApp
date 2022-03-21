@@ -49,29 +49,60 @@
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
                 <Button Command="{Binding BoldTextCommand}"
-                        CommandParameter="{Binding ElementName=rtbNote}">
+                        CommandParameter="{Binding ElementName=rtbNote}"
+                        Margin="6 0 6 0">
                     <TextBlock Text="B"
-                               FontWeight="Bold" />
+                               FontWeight="Bold"
+                               FontSize="14"/>
                 </Button>
                 <Button Command="{Binding ItalicTextCommand}"
-                        CommandParameter="{Binding ElementName=rtbNote}">
+                        CommandParameter="{Binding ElementName=rtbNote}"
+                        Margin="6 0 6 0">
                     <TextBlock Text="I"
-                               FontStyle="Italic" />
+                               FontStyle="Italic"
+                               FontSize="14"/>
                 </Button>
                 <Button Command="{Binding UnderlineTextCommand}"
-                        CommandParameter="{Binding ElementName=rtbNote}">
+                        CommandParameter="{Binding ElementName=rtbNote}"
+                        Margin="6 0 6 0">
                     <TextBlock Text="U"
-                               TextDecorations="Underline" />
+                               TextDecorations="Underline"
+                               FontSize="14"/>
                 </Button>
+                <ComboBox Width="200" 
+                          SelectedValue="{Binding SelectedFont, Mode=TwoWay}"
+                          Margin="6 0 6 0"
+                          FontSize="14"
+                          ItemsSource="{Binding AvailableFonts}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding FontFamilyChangedCommand}" 
+                                                   CommandParameter="{Binding ElementName=rtbNote}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+                <ComboBox Width="50"
+                          IsEditable="True"
+                          Margin="6 0 6 0"
+                          FontSize="14"
+                          ItemsSource="{Binding AvailableFontSizes}"
+                          SelectedValue="{Binding SelectedFontSize, Mode=TwoWay}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding FontSizeChangedCommand}" 
+                                               CommandParameter="{Binding ElementName=rtbNote}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
             </ToolBar>
         </ToolBarTray>
         <Grid>
             <RichTextBox x:Name="rtbNote"
-                helpers:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay}">
+                         helpers:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay}" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding NoteTextChangedCommand}" 
-                                               CommandParameter="{Binding ElementName=rtbNote}"/>
+                                               CommandParameter="{Binding ElementName=rtbNote}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </RichTextBox>
