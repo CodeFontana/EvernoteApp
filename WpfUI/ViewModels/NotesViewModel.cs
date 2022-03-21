@@ -14,6 +14,8 @@ public class NotesViewModel : ViewModelBase
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private Notebook _selectedNotebook;
+    private string _currentNoteXaml;
+    private int _currentNoteCharCount;
 
     public NotesViewModel()
     {
@@ -26,6 +28,8 @@ public class NotesViewModel : ViewModelBase
         NewNotebookCommand = new NewNotebookCommand(this);
         NewNoteCommand = new NewNoteCommand(this);
         ExitApplicationCommand = new ExitApplicationCommand();
+        NoteTextChangedCommand = new NoteTextChangedCommand(this);
+        BoldTextCommand = new BoldTextCommand(this);
         Notebooks = new();
         Notes = new();
         GetNotebooks();
@@ -39,18 +43,51 @@ public class NotesViewModel : ViewModelBase
         set 
         { 
             _selectedNotebook = value;
-            OnPropertyChanged("SelectedNotebook");
+            OnPropertyChanged(nameof(SelectedNotebook));
             GetNotes();
         }
     }
 
     public ObservableCollection<Note> Notes { get; set; }
 
+    public string CurrentNoteXaml
+    {
+        get { return _currentNoteXaml; }
+        set 
+        { 
+            _currentNoteXaml = value;
+            OnPropertyChanged(nameof(CurrentNoteXaml));
+        }
+    }
+
+    public int CurrentNoteCharCount
+    {
+        get { return _currentNoteCharCount; }
+        set 
+        { 
+            _currentNoteCharCount = value;
+            OnPropertyChanged(nameof(CurrentNoteCharCount));
+            OnPropertyChanged(nameof(CurrentNoteCharCountStatusMessage));
+        }
+    }
+
+    
+
+    public string CurrentNoteCharCountStatusMessage
+    {
+        get { return $"Document length: {CurrentNoteCharCount} characters"; }
+    }
+
+
     public ICommand NewNotebookCommand { get; set; }
 
     public ICommand NewNoteCommand { get; set; }
 
     public ICommand ExitApplicationCommand { get; set; }
+
+    public ICommand NoteTextChangedCommand { get; set; }
+
+    public ICommand BoldTextCommand { get; set; }
 
     public async Task CreateNotebook()
     {

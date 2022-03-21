@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUI.Views"
              xmlns:vms="clr-namespace:WpfUI.ViewModels"
+             xmlns:helpers="clr-namespace:WpfUI.Helpers" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DataContext="{d:DesignInstance vms:NotesViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -21,9 +22,14 @@
                           Command="{Binding ExitApplicationCommand}"/>
             </MenuItem>
         </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="{Binding CurrentNoteCharCountStatusMessage}" />
+            </StatusBarItem>
+        </StatusBar>
         <ListView DockPanel.Dock="Left"
                   Width="140"
-                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
+                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding Notebooks}">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -42,11 +48,22 @@
         </ListView>
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Content="Test" />
+                <Button Command="{Binding BoldTextCommand}">
+                    <TextBlock Text="B"
+                               FontWeight="Bold" />
+                </Button>
             </ToolBar>
         </ToolBarTray>
         <Grid>
-            
+            <RichTextBox x:Name="rtbNote"
+                helpers:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding NoteTextChangedCommand}" 
+                                               CommandParameter="{Binding ElementName=rtbNote}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </RichTextBox>
         </Grid>
     </DockPanel>
 </UserControl>
