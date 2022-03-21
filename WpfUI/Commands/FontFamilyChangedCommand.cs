@@ -17,12 +17,7 @@ public class FontFamilyChangedCommand : CommandBase
     {
         if (parameter is RichTextBox rtb)
         {
-            if (rtb.Selection.Text.Length > 0)
-            {
-                rtb.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, _notesViewModel.SelectedFont);
-            }
-
-            rtb.FontFamily = _notesViewModel.SelectedFont;
+            rtb.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, _notesViewModel.SelectedFont);
         }
     }
 }

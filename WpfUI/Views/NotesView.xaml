@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUI.Views"
              xmlns:vms="clr-namespace:WpfUI.ViewModels"
+             xmlns:custom="clr-namespace:WpfUI.Controls"
              xmlns:helpers="clr-namespace:WpfUI.Helpers" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DataContext="{d:DesignInstance vms:NotesViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
@@ -97,15 +98,16 @@
             </ToolBar>
         </ToolBarTray>
         <Grid>
-            <RichTextBox x:Name="rtbNote"
-                         helpers:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay}" >
+            <custom:RichTextBoxEx x:Name="rtbNote"
+                                  helpers:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay}" 
+                                  CurrentFontFamily="{Binding SelectedFont, Mode=TwoWay}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding NoteTextChangedCommand}" 
                                                CommandParameter="{Binding ElementName=rtbNote}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </RichTextBox>
+            </custom:RichTextBoxEx>
         </Grid>
     </DockPanel>
 </UserControl>

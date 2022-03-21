@@ -34,7 +34,7 @@ public class NotesViewModel : ViewModelBase
         FontFamilyChangedCommand = new FontFamilyChangedCommand(this);
         FontSizeChangedCommand = new FontSizeChangedCommand(this);
         AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
-        SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Calibri");
+        SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
         AvailableFontSizes = Enumerable.Range(6, 72).ToList();
         SelectedFontSize = 12;
         Notebooks = new();
