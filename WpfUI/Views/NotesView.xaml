@@ -5,11 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfUI.Views"
              xmlns:vms="clr-namespace:WpfUI.ViewModels"
-             xmlns:custom="clr-namespace:WpfUI.Controls"
+             xmlns:uc="clr-namespace:WpfUI.Controls"
              xmlns:helpers="clr-namespace:WpfUI.Helpers" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DataContext="{d:DesignInstance vms:NotesViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <vms:NotesViewModel x:Key="vm" />
+        </ResourceDictionary>
+    </UserControl.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -35,7 +40,18 @@
                   ItemsSource="{Binding Notebooks}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <custom:NotebookControl Notebook="{Binding}" />
+                    <Grid>
+                        <uc:NotebookControl Notebook="{Binding}">
+                            <uc:NotebookControl.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Rename"
+                                              Command="{Binding Source={StaticResource vm}, Path=RenameNotebookCommand}"/>
+                                </ContextMenu>
+                            </uc:NotebookControl.ContextMenu>
+                        </uc:NotebookControl>
+                        <TextBox Text="{Binding Name}" 
+                                 Visibility="{Binding Source={StaticResource vm}, Path=RenameNotebookTextboxVisibility}"/>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -44,7 +60,7 @@
                   ItemsSource="{Binding Notes}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <custom:NoteControl Note="{Binding}" />
+                    <uc:NoteControl Note="{Binding}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -99,7 +115,7 @@
             </ToolBar>
         </ToolBarTray>
         <Grid>
-            <custom:RichTextBoxEx x:Name="rtbNote"
+            <uc:RichTextBoxEx x:Name="rtbNote"
                                   helpers:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay}" 
                                   CurrentFontFamily="{Binding SelectedFont, Mode=TwoWay}">
                 <i:Interaction.Triggers>
@@ -108,7 +124,7 @@
                                                CommandParameter="{Binding ElementName=rtbNote}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </custom:RichTextBoxEx>
+            </uc:RichTextBoxEx>
         </Grid>
     </DockPanel>
 </UserControl>

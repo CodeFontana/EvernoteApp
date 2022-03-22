@@ -10,6 +10,7 @@ using System.Windows;
 using WpfUI.Services;
 using WpfUI.Stores;
 using WpfUI.ViewModels;
+using WpfUI.Views;
 
 namespace WpfUI;
 
@@ -42,14 +43,22 @@ public partial class App : Application
                     services.AddTransient<LoginViewModel>();
                     services.AddTransient<NotesViewModel>();
                     services.AddSingleton<NavigationStore>();
-                    services.AddSingleton<NavigationService<LoginViewModel>>();
-                    services.AddSingleton<NavigationService<NotesViewModel>>();
-                    services.AddSingleton<Func<LoginViewModel>>((s) => () => s.GetRequiredService<LoginViewModel>());
-                    services.AddSingleton<Func<NotesViewModel>>((s) => () => s.GetRequiredService<NotesViewModel>());
-                    services.AddSingleton<MainViewModel>();
-                    services.AddSingleton(s => new MainWindow()
+                    services.AddTransient<NavigationService<LoginViewModel>>();
+                    services.AddTransient<NavigationService<NotesViewModel>>();
+                    services.AddTransient<Func<LoginViewModel>>((sp) => () => sp.GetRequiredService<LoginViewModel>());
+                    services.AddTransient<Func<NotesViewModel>>((sp) => () => sp.GetRequiredService<NotesViewModel>());
+                    services.AddSingleton<LoginView>(sp => new LoginView()
                     {
-                        DataContext = s.GetRequiredService<MainViewModel>()
+                        DataContext = sp.GetRequiredService<LoginViewModel>()
+                    });
+                    services.AddSingleton<NotesView>(sp => new NotesView()
+                    {
+                        DataContext = sp.GetRequiredService<NotesViewModel>()
+                    });
+                    services.AddSingleton<MainViewModel>();
+                    services.AddSingleton<MainWindow>(sp => new MainWindow()
+                    {
+                        DataContext = sp.GetRequiredService<MainViewModel>()
                     });
                 })
                 .UseSerilog((context, services, loggerConfiguration) =>
@@ -72,6 +81,9 @@ public partial class App : Application
     protected override async void OnStartup(StartupEventArgs e)
     {
         await _appHost.StartAsync();
+        using IServiceScope scope = _appHost.Services.CreateScope();
+        NotesDbContext db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
+        db.Database.Migrate();
         NavigationService<NotesViewModel> navService = _appHost.Services.GetRequiredService<NavigationService<NotesViewModel>>();
         navService.Navigate();
         MainWindow mainWindow = _appHost.Services.GetRequiredService<MainWindow>();

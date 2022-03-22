@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using WpfUI.Commands;
@@ -14,16 +15,11 @@ namespace WpfUI.ViewModels;
 
 public class NotesViewModel : ViewModelBase
 {
-    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly IServiceProvider _serviceProvider;
 
     public NotesViewModel()
     {
         // Parameterless default constructor -- for design time
-    }
-
-    public NotesViewModel(IServiceScopeFactory scopeFactory)
-    {
-        _scopeFactory = scopeFactory;
         NewNotebookCommand = new NewNotebookCommand(this);
         NewNoteCommand = new NewNoteCommand(this);
         ExitApplicationCommand = new ExitApplicationCommand();
@@ -33,10 +29,34 @@ public class NotesViewModel : ViewModelBase
         UnderlineTextCommand = new UnderlineTextCommand(this);
         FontFamilyChangedCommand = new FontFamilyChangedCommand(this);
         FontSizeChangedCommand = new FontSizeChangedCommand(this);
+        RenameNotebookCommand = new RenameNotebookCommand(this);
         AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
         SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
         AvailableFontSizes = Enumerable.Range(6, 72).ToList();
-        SelectedFontSize = 12;
+        SelectedFontSize = 14;
+        RenameNotebookTextboxVisibility = Visibility.Collapsed;
+        Notebooks = new();
+        Notes = new();
+    }
+
+    public NotesViewModel(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+        NewNotebookCommand = new NewNotebookCommand(this);
+        NewNoteCommand = new NewNoteCommand(this);
+        ExitApplicationCommand = new ExitApplicationCommand();
+        NoteTextChangedCommand = new NoteTextChangedCommand(this);
+        BoldTextCommand = new BoldTextCommand(this);
+        ItalicTextCommand = new ItalicTextCommand(this);
+        UnderlineTextCommand = new UnderlineTextCommand(this);
+        FontFamilyChangedCommand = new FontFamilyChangedCommand(this);
+        FontSizeChangedCommand = new FontSizeChangedCommand(this);
+        RenameNotebookCommand = new RenameNotebookCommand(this);
+        AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
+        SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
+        AvailableFontSizes = Enumerable.Range(6, 72).ToList();
+        SelectedFontSize = 14;
+        RenameNotebookTextboxVisibility = Visibility.Collapsed;
         Notebooks = new();
         Notes = new();
         GetNotebooks();
@@ -115,6 +135,20 @@ public class NotesViewModel : ViewModelBase
         }
     }
 
+    private Visibility _renameNotebookTextboxVisbility;
+    public Visibility RenameNotebookTextboxVisibility
+    {
+        get
+        {
+            return _renameNotebookTextboxVisbility;
+        }
+        set
+        {
+            _renameNotebookTextboxVisbility = value;
+            OnPropertyChanged(nameof(RenameNotebookTextboxVisibility));
+        }
+    }
+
     public ICommand NewNotebookCommand { get; set; }
 
     public ICommand NewNoteCommand { get; set; }
@@ -129,6 +163,8 @@ public class NotesViewModel : ViewModelBase
     public ICommand FontFamilyChangedCommand { get; set; }
     public ICommand FontSizeChangedCommand { get; set; }
 
+    public ICommand RenameNotebookCommand { get; set; }
+
     public async Task CreateNotebook()
     {
         Notebook notebook = new()
@@ -136,7 +172,7 @@ public class NotesViewModel : ViewModelBase
             Name = "New notebook"
         };
 
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = _serviceProvider.CreateScope();
         NotesDbContext db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
         await db.Notebooks.AddAsync(notebook);
         await db.SaveChangesAsync();
@@ -153,7 +189,7 @@ public class NotesViewModel : ViewModelBase
             Title = "New note"
         };
 
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = _serviceProvider.CreateScope();
         NotesDbContext db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
         await db.Notes.AddAsync(newNote);
         await db.SaveChangesAsync();
@@ -162,7 +198,7 @@ public class NotesViewModel : ViewModelBase
 
     private void GetNotebooks()
     {
-        using IServiceScope scope = _scopeFactory.CreateScope();
+        using IServiceScope scope = _serviceProvider.CreateScope();
         NotesDbContext db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
         Notebooks.Clear();
         db.Notebooks.ToList().ForEach(x => Notebooks.Add(x));
@@ -172,11 +208,21 @@ public class NotesViewModel : ViewModelBase
     {
         if (SelectedNotebook != null)
         {
-            using IServiceScope scope = _scopeFactory.CreateScope();
+            using IServiceScope scope = _serviceProvider.CreateScope();
             NotesDbContext db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
             IQueryable<Note> notes = db.Notes.Where(x => x.NotebookId == SelectedNotebook.Id);
             Notes.Clear();
             notes.ToList().ForEach(x => Notes.Add(x));
         }
+    }
+
+    public void StartEditing()
+    {
+        RenameNotebookTextboxVisibility = Visibility.Visible;
+    }
+
+    public void StopEditing()
+    {
+        RenameNotebookTextboxVisibility = Visibility.Collapsed;
     }
 }
