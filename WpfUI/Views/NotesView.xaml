@@ -116,8 +116,9 @@
         </ToolBarTray>
         <Grid>
             <uc:RichTextBoxEx x:Name="rtbNote"
-                                  helpers:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay}" 
-                                  CurrentFontFamily="{Binding SelectedFont, Mode=TwoWay}">
+                              helpers:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay}" 
+                              CurrentFontFamily="{Binding SelectedFont, Mode=TwoWay}"
+                              FontSize="{Binding SelectedFontSize}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
                         <i:InvokeCommandAction Command="{Binding NoteTextChangedCommand}" 

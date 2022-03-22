@@ -32,7 +32,7 @@ public class NotesViewModel : ViewModelBase
         RenameNotebookCommand = new RenameNotebookCommand(this);
         AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
         SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
-        AvailableFontSizes = Enumerable.Range(6, 72).ToList();
+        AvailableFontSizes = Enumerable.Range(6, 72).ToList().ConvertAll(i => (double)i);
         SelectedFontSize = 14;
         RenameNotebookTextboxVisibility = Visibility.Collapsed;
         Notebooks = new();
@@ -54,7 +54,7 @@ public class NotesViewModel : ViewModelBase
         RenameNotebookCommand = new RenameNotebookCommand(this);
         AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
         SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
-        AvailableFontSizes = Enumerable.Range(6, 72).ToList();
+        AvailableFontSizes = Enumerable.Range(6, 72).ToList().ConvertAll(i => (double)i);
         SelectedFontSize = 14;
         RenameNotebookTextboxVisibility = Visibility.Collapsed;
         Notebooks = new();
@@ -119,10 +119,10 @@ public class NotesViewModel : ViewModelBase
         }
     }
 
-    public List<int> AvailableFontSizes { get; set; }
+    public List<double> AvailableFontSizes { get; set; }
 
-    private int _selectedFontSize;
-    public int SelectedFontSize
+    private double _selectedFontSize;
+    public double SelectedFontSize
     {
         get
         {

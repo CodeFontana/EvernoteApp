@@ -17,7 +17,7 @@ public class FontSizeChangedCommand : CommandBase
     {
         if (parameter is RichTextBox rtb)
         {
-            rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, (double)_notesViewModel.SelectedFontSize);
+            rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, _notesViewModel.SelectedFontSize);
         }
     }
 }
