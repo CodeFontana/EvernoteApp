@@ -26,6 +26,8 @@ public class NotesViewModel : ViewModelBase
         FontFamilyChangedCommand = new FontFamilyChangedCommand(this);
         FontSizeChangedCommand = new FontSizeChangedCommand(this);
         RenameNotebookCommand = new RenameNotebookCommand(this);
+        UpdateNotebookCommand = new UpdateNotebookCommandAsync(this);
+        UpdateNotebookEnterCommand = new UpdateNotebookEnterCommandAsync(this);
         DeleteNoteCommand = new DeleteNoteCommandAsync(this);
         DeleteNotebookCommand = new DeleteNotebookCommandAsync(this);
         AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
@@ -151,6 +153,8 @@ public class NotesViewModel : ViewModelBase
     public ICommand FontFamilyChangedCommand { get; set; }
     public ICommand FontSizeChangedCommand { get; set; }
     public ICommand RenameNotebookCommand { get; set; }
+    public ICommand UpdateNotebookCommand { get; set; }
+    public ICommand UpdateNotebookEnterCommand { get; set; }
     public ICommand DeleteNoteCommand { get; set; }
     public ICommand DeleteNotebookCommand { get; set; }
 
@@ -224,5 +228,6 @@ public class NotesViewModel : ViewModelBase
         RenameNotebookTextboxVisibility = Visibility.Collapsed;
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
         await db.UpdateNotebook(notebook);
+        await GetNotebooksAsync();
     }
 }
