@@ -78,6 +78,20 @@ public class NotesViewModel : ViewModelBase
         }
     }
 
+    private Note _selectedNote;
+    public Note SelectedNote
+    {
+        get
+        {
+            return _selectedNote;
+        }
+        set
+        {
+            _selectedNote = value;
+            OnPropertyChanged(nameof(SelectedNote));
+        }
+    }
+
     private string _currentNoteXaml;
     public string CurrentNoteXaml
     {

@@ -36,9 +36,9 @@
         </StatusBar>
         <ListView DockPanel.Dock="Left"
                   Background="MidnightBlue"
-                  MinWidth="150"
-                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
-                  ItemsSource="{Binding Notebooks}">
+                  MinWidth="180"
+                  ItemsSource="{Binding Path=Notebooks}"
+                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -72,8 +72,9 @@
             </ListView.ItemTemplate>
         </ListView>
         <ListView DockPanel.Dock="Left"
-                  MinWidth="150"
-                  ItemsSource="{Binding Notes}">
+                  MinWidth="180"
+                  ItemsSource="{Binding Notes}"
+                  SelectedValue="{Binding SelectedNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <uc:NoteControl Note="{Binding}" />
@@ -128,6 +129,9 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>
+                <Button>
+                    
+                </Button>
             </ToolBar>
         </ToolBarTray>
         <Grid>
