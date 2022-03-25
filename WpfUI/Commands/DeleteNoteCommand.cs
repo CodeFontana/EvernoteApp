@@ -16,7 +16,7 @@ public class DeleteNoteCommand : CommandBaseAsync
     {
         if (parameter is int noteId)
         {
-            await _notesViewModel.DeleteNote(noteId);
+            await _notesViewModel.DeleteNoteAsync(noteId);
         }
     }
 }

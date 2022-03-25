@@ -35,7 +35,7 @@ public class NotesViewModel : ViewModelBase
         RenameNotebookTextboxVisibility = Visibility.Collapsed;
         Notebooks = new();
         Notes = new();
-        _ = GetNotebooks();
+        _ = GetNotebooksAsync();
     }
 
     private ObservableCollection<Notebook> _notebooks;
@@ -60,7 +60,7 @@ public class NotesViewModel : ViewModelBase
 
             if (_selectedNotebook != null)
             {
-                _ = GetNotes();
+                _ = GetNotesAsync();
             }
         }
     }
@@ -154,7 +154,7 @@ public class NotesViewModel : ViewModelBase
     public ICommand DeleteNoteCommand { get; set; }
     public ICommand DeleteNotebookCommand { get; set; }
 
-    public async Task CreateNotebook()
+    public async Task CreateNotebookAsync()
     {
         Notebook notebook = new()
         {
@@ -163,10 +163,10 @@ public class NotesViewModel : ViewModelBase
 
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
         await db.CreateNotebook(notebook);
-        await GetNotebooks();
+        await GetNotebooksAsync();
     }
 
-    public async Task CreateNote(int notebookId)
+    public async Task CreateNoteAsync(int notebookId)
     {
         Note newNote = new()
         {
@@ -178,10 +178,10 @@ public class NotesViewModel : ViewModelBase
 
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
         await db.CreateNote(newNote);
-        await GetNotes();
+        await GetNotesAsync();
     }
 
-    private async Task GetNotebooks()
+    private async Task GetNotebooksAsync()
     {
         Notebooks.Clear();
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
@@ -189,7 +189,7 @@ public class NotesViewModel : ViewModelBase
         notebooks.ForEach(x => Notebooks.Add(x));
     }
 
-    private async Task GetNotes()
+    private async Task GetNotesAsync()
     {
         if (SelectedNotebook != null)
         {
@@ -200,18 +200,18 @@ public class NotesViewModel : ViewModelBase
         }
     }
 
-    public async Task DeleteNote(int noteId)
+    public async Task DeleteNoteAsync(int noteId)
     {
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
         await db.DeleteNote(noteId);
-        await GetNotes();
+        await GetNotesAsync();
     }
 
-    public async Task DeleteNotebook(int notebookId)
+    public async Task DeleteNotebookAsync(int notebookId)
     {
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
         await db.DeleteNotebook(notebookId);
-        await GetNotebooks();
+        await GetNotebooksAsync();
     }
 
     public void StartEditing()
@@ -219,8 +219,10 @@ public class NotesViewModel : ViewModelBase
         RenameNotebookTextboxVisibility = Visibility.Visible;
     }
 
-    public void StopEditing()
+    public async Task StopEditingAsync(Notebook notebook)
     {
         RenameNotebookTextboxVisibility = Visibility.Collapsed;
+        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        await db.UpdateNotebook(notebook);
     }
 }

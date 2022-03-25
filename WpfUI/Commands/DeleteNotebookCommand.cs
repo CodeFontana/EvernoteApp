@@ -16,7 +16,7 @@ public class DeleteNotebookCommand : CommandBaseAsync
     {
         if (parameter is int notebookId)
         {
-            await _notesViewModel.DeleteNotebook(notebookId);
+            await _notesViewModel.DeleteNotebookAsync(notebookId);
         }
     }
 }

@@ -14,6 +14,6 @@ public class NewNotebookCommand : CommandBaseAsync
 
     public override async Task ExecuteAsync(object parameter)
     {
-        await _notesViewModel.CreateNotebook();
+        await _notesViewModel.CreateNotebookAsync();
     }
 }

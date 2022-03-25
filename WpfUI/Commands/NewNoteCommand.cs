@@ -26,6 +26,6 @@ public class NewNoteCommand : CommandBaseAsync
     public override async Task ExecuteAsync(object parameter)
     {
         Notebook selectedNotebook = parameter as Notebook;
-        await _notesViewModel.CreateNote(selectedNotebook.Id);
+        await _notesViewModel.CreateNoteAsync(selectedNotebook.Id);
     }
 }
