@@ -1,11 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
-internal class UpdateNotebookCommand
-{
 
+public class UpdateNotebookCommand : CommandBaseAsync
+{
+    private readonly NotesViewModel _notesViewModel;
+
+    public UpdateNotebookCommand(NotesViewModel notesViewModel)
+    {
+        _notesViewModel = notesViewModel;
+    }
+
+    public override async Task ExecuteAsync(object parameter)
+    {
+        await _notesViewModel.StopEditingAsync(_notesViewModel.SelectedNotebook);
+    }
 }

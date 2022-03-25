@@ -1,6 +1,7 @@
 ﻿using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
+
 public class RenameNotebookCommand : CommandBase
 {
     private readonly NotesViewModel _notesViewModel;
