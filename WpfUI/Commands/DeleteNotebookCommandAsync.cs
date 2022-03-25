@@ -3,17 +3,20 @@ using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
 
-public class UpdateNotebookCommand : CommandBaseAsync
+public class DeleteNotebookCommandAsync : CommandBaseAsync
 {
     private readonly NotesViewModel _notesViewModel;
 
-    public UpdateNotebookCommand(NotesViewModel notesViewModel)
+    public DeleteNotebookCommandAsync(NotesViewModel notesViewModel)
     {
         _notesViewModel = notesViewModel;
     }
 
     public override async Task ExecuteAsync(object parameter)
     {
-        await _notesViewModel.StopEditingAsync(_notesViewModel.SelectedNotebook);
+        if (parameter is int notebookId)
+        {
+            await _notesViewModel.DeleteNotebookAsync(notebookId);
+        }
     }
 }

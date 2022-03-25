@@ -10,7 +10,7 @@ public class LoginViewModel : ViewModelBase
     public LoginViewModel()
     {
         RegisterCommand = new RegisterUserCommand(this);
-        LoginCommand = new LoginUserCommand(this);
+        LoginCommand = new LoginUserCommandAsync(this);
     }
 
     public User User

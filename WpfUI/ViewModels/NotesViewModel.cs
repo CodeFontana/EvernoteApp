@@ -16,8 +16,8 @@ public class NotesViewModel : ViewModelBase
 {
     public NotesViewModel()
     {
-        NewNotebookCommand = new NewNotebookCommand(this);
-        NewNoteCommand = new NewNoteCommand(this);
+        NewNotebookCommand = new NewNotebookCommandAsync(this);
+        NewNoteCommand = new NewNoteCommandAsync(this);
         ExitApplicationCommand = new ExitApplicationCommand();
         NoteTextChangedCommand = new NoteTextChangedCommand(this);
         BoldTextCommand = new BoldTextCommand(this);
@@ -26,8 +26,8 @@ public class NotesViewModel : ViewModelBase
         FontFamilyChangedCommand = new FontFamilyChangedCommand(this);
         FontSizeChangedCommand = new FontSizeChangedCommand(this);
         RenameNotebookCommand = new RenameNotebookCommand(this);
-        DeleteNoteCommand = new DeleteNoteCommand(this);
-        DeleteNotebookCommand = new DeleteNotebookCommand(this);
+        DeleteNoteCommand = new DeleteNoteCommandAsync(this);
+        DeleteNotebookCommand = new DeleteNotebookCommandAsync(this);
         AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
         SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
         AvailableFontSizes = Enumerable.Range(6, 72).ToList().ConvertAll(i => (double)i);

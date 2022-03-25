@@ -4,11 +4,11 @@ using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
 
-public class NewNoteCommand : CommandBaseAsync
+public class NewNoteCommandAsync : CommandBaseAsync
 {
     private readonly NotesViewModel _notesViewModel;
 
-    public NewNoteCommand(NotesViewModel notesViewModel)
+    public NewNoteCommandAsync(NotesViewModel notesViewModel)
     {
         _notesViewModel = notesViewModel;
     }

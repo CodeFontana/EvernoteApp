@@ -3,11 +3,11 @@ using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
 
-public class LoginUserCommand : CommandBaseAsync
+public class LoginUserCommandAsync : CommandBaseAsync
 {
     private readonly LoginViewModel _loginViewModel;
 
-    public LoginUserCommand(LoginViewModel loginViewModel)
+    public LoginUserCommandAsync(LoginViewModel loginViewModel)
     {
         _loginViewModel = loginViewModel;
     }
