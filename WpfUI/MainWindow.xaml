@@ -5,20 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfUI"
         xmlns:vms="clr-namespace:WpfUI.ViewModels"
-        xmlns:views="clr-namespace:WpfUI.Views"
+        d:DataContext="{d:DesignInstance vms:MainViewModel, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
     <Grid>
-        <Grid.Resources>
-            <DataTemplate DataType="{x:Type vms:LoginViewModel}">
-                <views:LoginView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type vms:NotesViewModel}">
-                <views:NotesView />
-            </DataTemplate>
-        </Grid.Resources>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -31,6 +22,5 @@
                         Grid.Column="0" 
                         Margin="0 0 0 0"
                         Content="{Binding CurrentViewModel}" />
-
     </Grid>
 </Window>

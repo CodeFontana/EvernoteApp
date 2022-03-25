@@ -1,6 +1,5 @@
 ﻿using DataAccessLibrary.Entities;
 using DataAccessLibrary.Notes;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,11 +14,8 @@ namespace WpfUI.ViewModels;
 
 public class NotesViewModel : ViewModelBase
 {
-    private readonly IServiceProvider _serviceProvider;
-
     public NotesViewModel()
     {
-        // Parameterless default constructor -- for design time
         NewNotebookCommand = new NewNotebookCommand(this);
         NewNoteCommand = new NewNoteCommand(this);
         ExitApplicationCommand = new ExitApplicationCommand();
@@ -30,6 +26,8 @@ public class NotesViewModel : ViewModelBase
         FontFamilyChangedCommand = new FontFamilyChangedCommand(this);
         FontSizeChangedCommand = new FontSizeChangedCommand(this);
         RenameNotebookCommand = new RenameNotebookCommand(this);
+        DeleteNoteCommand = new DeleteNoteCommand(this);
+        DeleteNotebookCommand = new DeleteNotebookCommand(this);
         AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
         SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
         AvailableFontSizes = Enumerable.Range(6, 72).ToList().ConvertAll(i => (double)i);
@@ -37,53 +35,53 @@ public class NotesViewModel : ViewModelBase
         RenameNotebookTextboxVisibility = Visibility.Collapsed;
         Notebooks = new();
         Notes = new();
+        _ = GetNotebooks();
     }
 
-    public NotesViewModel(IServiceProvider serviceProvider)
+    private ObservableCollection<Notebook> _notebooks;
+    public ObservableCollection<Notebook> Notebooks
     {
-        _serviceProvider = serviceProvider;
-        NewNotebookCommand = new NewNotebookCommand(this);
-        NewNoteCommand = new NewNoteCommand(this);
-        ExitApplicationCommand = new ExitApplicationCommand();
-        NoteTextChangedCommand = new NoteTextChangedCommand(this);
-        BoldTextCommand = new BoldTextCommand(this);
-        ItalicTextCommand = new ItalicTextCommand(this);
-        UnderlineTextCommand = new UnderlineTextCommand(this);
-        FontFamilyChangedCommand = new FontFamilyChangedCommand(this);
-        FontSizeChangedCommand = new FontSizeChangedCommand(this);
-        RenameNotebookCommand = new RenameNotebookCommand(this);
-        AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
-        SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
-        AvailableFontSizes = Enumerable.Range(6, 72).ToList().ConvertAll(i => (double)i);
-        SelectedFontSize = 14;
-        RenameNotebookTextboxVisibility = Visibility.Collapsed;
-        Notebooks = new();
-        Notes = new();
-        GetNotebooks();
+        get => _notebooks;
+        set
+        {
+            _notebooks = value;
+            OnPropertyChanged(nameof(Notebooks));
+        }
     }
-
-    public ObservableCollection<Notebook> Notebooks { get; set; }
 
     private Notebook _selectedNotebook;
     public Notebook SelectedNotebook
     {
-        get { return _selectedNotebook; }
-        set 
-        { 
+        get => _selectedNotebook;
+        set
+        {
             _selectedNotebook = value;
             OnPropertyChanged(nameof(SelectedNotebook));
-            GetNotes();
+
+            if (_selectedNotebook != null)
+            {
+                _ = GetNotes();
+            }
         }
     }
 
-    public ObservableCollection<Note> Notes { get; set; }
+    private ObservableCollection<Note> _notes;
+    public ObservableCollection<Note> Notes
+    {
+        get => _notes;
+        set
+        {
+            _notes = value;
+            OnPropertyChanged(nameof(Notes));
+        }
+    }
 
     private string _currentNoteXaml;
     public string CurrentNoteXaml
     {
-        get { return _currentNoteXaml; }
-        set 
-        { 
+        get => _currentNoteXaml;
+        set
+        {
             _currentNoteXaml = value;
             OnPropertyChanged(nameof(CurrentNoteXaml));
         }
@@ -92,9 +90,9 @@ public class NotesViewModel : ViewModelBase
     private int _currentNoteCharCount;
     public int CurrentNoteCharCount
     {
-        get { return _currentNoteCharCount; }
-        set 
-        { 
+        get => _currentNoteCharCount;
+        set
+        {
             _currentNoteCharCount = value;
             OnPropertyChanged(nameof(CurrentNoteCharCount));
             OnPropertyChanged(nameof(CurrentNoteCharCountStatusMessage));
@@ -103,7 +101,7 @@ public class NotesViewModel : ViewModelBase
 
     public string CurrentNoteCharCountStatusMessage
     {
-        get { return $"Document length: {CurrentNoteCharCount} characters"; }
+        get => $"Document length: {CurrentNoteCharCount} characters";
     }
 
     public ICollection<FontFamily> AvailableFonts { get; }
@@ -111,9 +109,9 @@ public class NotesViewModel : ViewModelBase
     private FontFamily _selectedFont;
     public FontFamily SelectedFont
     {
-        get { return _selectedFont; }
-        set 
-        { 
+        get => _selectedFont;
+        set
+        {
             _selectedFont = value;
             OnPropertyChanged(nameof(SelectedFont));
         }
@@ -124,10 +122,7 @@ public class NotesViewModel : ViewModelBase
     private double _selectedFontSize;
     public double SelectedFontSize
     {
-        get
-        {
-            return _selectedFontSize;
-        }
+        get => _selectedFontSize;
         set
         {
             _selectedFontSize = value;
@@ -138,10 +133,7 @@ public class NotesViewModel : ViewModelBase
     private Visibility _renameNotebookTextboxVisbility;
     public Visibility RenameNotebookTextboxVisibility
     {
-        get
-        {
-            return _renameNotebookTextboxVisbility;
-        }
+        get => _renameNotebookTextboxVisbility;
         set
         {
             _renameNotebookTextboxVisbility = value;
@@ -150,20 +142,17 @@ public class NotesViewModel : ViewModelBase
     }
 
     public ICommand NewNotebookCommand { get; set; }
-
     public ICommand NewNoteCommand { get; set; }
-
     public ICommand ExitApplicationCommand { get; set; }
-
     public ICommand NoteTextChangedCommand { get; set; }
-
     public ICommand BoldTextCommand { get; set; }
     public ICommand ItalicTextCommand { get; set; }
     public ICommand UnderlineTextCommand { get; set; }
     public ICommand FontFamilyChangedCommand { get; set; }
     public ICommand FontSizeChangedCommand { get; set; }
-
     public ICommand RenameNotebookCommand { get; set; }
+    public ICommand DeleteNoteCommand { get; set; }
+    public ICommand DeleteNotebookCommand { get; set; }
 
     public async Task CreateNotebook()
     {
@@ -172,11 +161,9 @@ public class NotesViewModel : ViewModelBase
             Name = "New notebook"
         };
 
-        using IServiceScope scope = _serviceProvider.CreateScope();
-        NotesDbContext db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
-        await db.Notebooks.AddAsync(notebook);
-        await db.SaveChangesAsync();
-        GetNotebooks();
+        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        await db.CreateNotebook(notebook);
+        await GetNotebooks();
     }
 
     public async Task CreateNote(int notebookId)
@@ -189,31 +176,42 @@ public class NotesViewModel : ViewModelBase
             Title = "New note"
         };
 
-        using IServiceScope scope = _serviceProvider.CreateScope();
-        NotesDbContext db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
-        await db.Notes.AddAsync(newNote);
-        await db.SaveChangesAsync();
-        GetNotes();
+        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        await db.CreateNote(newNote);
+        await GetNotes();
     }
 
-    private void GetNotebooks()
+    private async Task GetNotebooks()
     {
-        using IServiceScope scope = _serviceProvider.CreateScope();
-        NotesDbContext db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
         Notebooks.Clear();
-        db.Notebooks.ToList().ForEach(x => Notebooks.Add(x));
+        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        List<Notebook> notebooks = await db.GetAllNotebooks();
+        notebooks.ForEach(x => Notebooks.Add(x));
     }
 
-    private void GetNotes()
+    private async Task GetNotes()
     {
         if (SelectedNotebook != null)
         {
-            using IServiceScope scope = _serviceProvider.CreateScope();
-            NotesDbContext db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
-            IQueryable<Note> notes = db.Notes.Where(x => x.NotebookId == SelectedNotebook.Id);
             Notes.Clear();
-            notes.ToList().ForEach(x => Notes.Add(x));
+            using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+            List<Note> notes = await db.GetAllNotes(SelectedNotebook.Id);
+            notes.ForEach(x => Notes.Add(x));
         }
+    }
+
+    public async Task DeleteNote(int noteId)
+    {
+        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        await db.DeleteNote(noteId);
+        await GetNotes();
+    }
+
+    public async Task DeleteNotebook(int notebookId)
+    {
+        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        await db.DeleteNotebook(notebookId);
+        await GetNotebooks();
     }
 
     public void StartEditing()

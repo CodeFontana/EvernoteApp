@@ -1,13 +1,24 @@
 ﻿<Application x:Class="WpfUI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WpfUI">
+             xmlns:local="clr-namespace:WpfUI"
+             xmlns:vms="clr-namespace:WpfUI.ViewModels"
+             xmlns:views="clr-namespace:WpfUI.Views">
     <Application.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Padding" Value="10 5" />
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Padding" Value="2" />
-        </Style>
+
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Common.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type vms:LoginViewModel}">
+                <views:LoginView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vms:NotesViewModel}">
+                <views:NotesView />
+            </DataTemplate>
+        </ResourceDictionary>
+
     </Application.Resources>
 </Application>

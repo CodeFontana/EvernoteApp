@@ -1,21 +1,42 @@
-﻿using WpfUI.Stores;
+﻿using DataAccessLibrary.Notes;
+using System;
 
 namespace WpfUI.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    private readonly NavigationStore _navigationStore;
-
-    public MainViewModel(NavigationStore navigationStore)
+    public MainViewModel()
     {
-        _navigationStore = navigationStore;
-        _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+        CurrentViewModel = CreateViewModel(ViewType.Notes);
     }
 
-    public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
-
-    private void OnCurrentViewModelChanged()
+    public enum ViewType
     {
-        OnPropertyChanged(nameof(CurrentViewModel));
+        Notes,
+        Login
+    }
+
+    private ViewModelBase _currentViewModel;
+    public ViewModelBase CurrentViewModel
+    {
+        get => _currentViewModel;
+        set
+        {
+            _currentViewModel = value;
+            OnPropertyChanged(nameof(CurrentViewModel));
+        }
+    }
+
+    public ViewModelBase CreateViewModel(ViewType viewType)
+    {
+        switch (viewType)
+        {
+            case ViewType.Notes:
+                return new NotesViewModel();
+            case ViewType.Login:
+                return new LoginViewModel();
+            default:
+                throw new ArgumentException("Invalid view type");
+        }
     }
 }

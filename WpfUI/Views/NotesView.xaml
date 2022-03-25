@@ -36,7 +36,7 @@
         <ListView DockPanel.Dock="Left"
                   Background="MidnightBlue"
                   MinWidth="150"
-                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedValue="{Binding SelectedNotebook, Mode=TwoWay}"
                   ItemsSource="{Binding Notebooks}">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -46,6 +46,9 @@
                                 <ContextMenu>
                                     <MenuItem Header="Rename"
                                               Command="{Binding Source={StaticResource vm}, Path=RenameNotebookCommand}"/>
+                                    <MenuItem Header="Delete"
+                                              Command="{Binding Source={StaticResource vm}, Path=DeleteNotebookCommand}"
+                                              CommandParameter="{Binding Id}" />
                                 </ContextMenu>
                             </uc:NotebookControl.ContextMenu>
                         </uc:NotebookControl>
