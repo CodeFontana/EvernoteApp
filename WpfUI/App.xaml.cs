@@ -64,6 +64,7 @@ public partial class App : Application
         NotesDbContext db = scope.ServiceProvider.GetRequiredService<NotesDbContext>();
         db.Database.Migrate();
         Window mainWindow = scope.ServiceProvider.GetRequiredService<MainWindow>();
+        mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         mainWindow.Show();
         base.OnStartup(e);
     }
