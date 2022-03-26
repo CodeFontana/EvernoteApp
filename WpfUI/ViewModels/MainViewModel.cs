@@ -10,6 +10,11 @@ public class MainViewModel : ViewModelBase
 {
     private readonly ViewModelFactory _viewModelFactory;
 
+    public MainViewModel()
+    {
+        
+    }
+
     public MainViewModel(Navigator navigator, ViewModelFactory viewModelFactory)
     {
         Navigator = navigator;

@@ -40,16 +40,8 @@ public class NotesViewModel : ViewModelBase
         _ = GetNotebooksAsync();
     }
 
-    private ObservableCollection<Notebook> _notebooks;
-    public ObservableCollection<Notebook> Notebooks
-    {
-        get => _notebooks;
-        set
-        {
-            _notebooks = value;
-            OnPropertyChanged(nameof(Notebooks));
-        }
-    }
+    public ObservableCollection<Notebook> Notebooks { get; set; }
+    
 
     private Notebook _selectedNotebook;
     public Notebook SelectedNotebook
@@ -67,16 +59,7 @@ public class NotesViewModel : ViewModelBase
         }
     }
 
-    private ObservableCollection<Note> _notes;
-    public ObservableCollection<Note> Notes
-    {
-        get => _notes;
-        set
-        {
-            _notes = value;
-            OnPropertyChanged(nameof(Notes));
-        }
-    }
+    public ObservableCollection<Note> Notes { get; set; }
 
     private Note _selectedNote;
     public Note SelectedNote
@@ -223,6 +206,7 @@ public class NotesViewModel : ViewModelBase
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
         await db.DeleteNote(noteId);
         await GetNotesAsync();
+        OnPropertyChanged(nameof(Notes));
     }
 
     public async Task DeleteNotebookAsync(int notebookId)
@@ -230,6 +214,7 @@ public class NotesViewModel : ViewModelBase
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
         await db.DeleteNotebook(notebookId);
         await GetNotebooksAsync();
+        OnPropertyChanged(nameof(Notebooks));
     }
 
     public void StartEditing()

@@ -39,9 +39,9 @@ public partial class App : Application
                     {
                         options.UseSqlite($@"Data Source={Environment.CurrentDirectory}\Notes.db;");
                     });
-                    services.AddScoped<ViewModelFactory>();
-                    services.AddScoped<NotesViewModelFactory>();
-                    services.AddScoped<LoginViewModelFactory>();
+                    services.AddSingleton<ViewModelFactory>();
+                    services.AddSingleton<NotesViewModelFactory>();
+                    services.AddSingleton<LoginViewModelFactory>();
                     services.AddScoped<Navigator>();
                     services.AddScoped<MainViewModel>();
                     services.AddScoped<MainWindow>(sp => new MainWindow(sp.GetRequiredService<MainViewModel>()));

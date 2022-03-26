@@ -1,5 +1,4 @@
 ﻿using WpfUI.State;
-using WpfUI.ViewModels;
 using WpfUI.ViewModels.Factory;
 using static WpfUI.ViewModels.Factory.ViewModelFactory;
 
