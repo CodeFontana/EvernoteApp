@@ -163,8 +163,9 @@ public class NotesViewModel : ViewModelBase
         };
 
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
-        await db.CreateNotebook(notebook);
+        int id = await db.CreateNotebook(notebook);
         await GetNotebooksAsync();
+        SelectedNotebook = Notebooks.FirstOrDefault(x => x.Id == id);
     }
 
     public async Task CreateNoteAsync(int notebookId)
@@ -178,8 +179,9 @@ public class NotesViewModel : ViewModelBase
         };
 
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
-        await db.CreateNote(newNote);
+        int id = await db.CreateNote(newNote);
         await GetNotesAsync();
+        SelectedNote = Notes.FirstOrDefault(x => x.Id == id);
     }
 
     private async Task GetNotebooksAsync()
@@ -213,7 +215,6 @@ public class NotesViewModel : ViewModelBase
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
         await db.DeleteNotebook(notebookId);
         await GetNotebooksAsync();
-        SelectedNotebook = null;
         Notes.Clear();
     }
 

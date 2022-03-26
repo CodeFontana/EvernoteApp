@@ -1,5 +1,6 @@
 ﻿using DataAccessLibrary.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace DataAccessLibrary.Notes;
 
@@ -12,16 +13,18 @@ public class NotesRepository : INotesRepository, IDisposable
         _db = notesDbContext;
     }
 
-    public async Task CreateNotebook(Notebook newNotebook)
+    public async Task<int> CreateNotebook(Notebook newNotebook)
     {
-        await _db.Notebooks.AddAsync(newNotebook);
+        EntityEntry<Notebook> newEntity = await _db.Notebooks.AddAsync(newNotebook);
         await _db.SaveChangesAsync();
+        return newEntity.Entity.Id;
     }
 
-    public async Task CreateNote(Note newNote)
+    public async Task<int> CreateNote(Note newNote)
     {
-        await _db.Notes.AddAsync(newNote);
+        EntityEntry<Note> newEntity = await _db.Notes.AddAsync(newNote);
         await _db.SaveChangesAsync();
+        return newEntity.Entity.Id;
     }
 
     public async Task<List<Notebook>> GetAllNotebooks()
