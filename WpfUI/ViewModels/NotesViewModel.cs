@@ -206,7 +206,6 @@ public class NotesViewModel : ViewModelBase
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
         await db.DeleteNote(noteId);
         await GetNotesAsync();
-        OnPropertyChanged(nameof(Notes));
     }
 
     public async Task DeleteNotebookAsync(int notebookId)
@@ -214,7 +213,8 @@ public class NotesViewModel : ViewModelBase
         using NotesRepository db = NotesRepositoryFactory.CreateRepository();
         await db.DeleteNotebook(notebookId);
         await GetNotebooksAsync();
-        OnPropertyChanged(nameof(Notebooks));
+        SelectedNotebook = null;
+        Notes.Clear();
     }
 
     public void StartEditing()
