@@ -7,16 +7,14 @@
              xmlns:local="clr-namespace:WpfUI.Views"
              xmlns:vms="clr-namespace:WpfUI.ViewModels"
              xmlns:uc="clr-namespace:WpfUI.Controls"
-             xmlns:helpers="clr-namespace:WpfUI.Helpers"
+             xmlns:helpers="clr-namespace:WpfUI.Helpers" 
+             x:Name="notesControl"
+             d:DataContext="{d:DesignInstance Type=vms:NotesViewModel}"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance vms:NotesViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <vms:NotesViewModel x:Key="vm" />
-        </ResourceDictionary>
-    </UserControl.Resources>
+
     <DockPanel>
+        
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="New notebook" 
@@ -29,15 +27,18 @@
                           Command="{Binding ExitApplicationCommand}"/>
             </MenuItem>
         </Menu>
+        
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
                 <TextBlock Text="{Binding CurrentNoteCharCountStatusMessage}" />
             </StatusBarItem>
         </StatusBar>
-        <ListView DockPanel.Dock="Left"
+        
+        <ListView x:Name="nbListView"
+                  DockPanel.Dock="Left"
                   Background="MidnightBlue"
                   MinWidth="180"
-                  ItemsSource="{Binding Path=Notebooks}"
+                  ItemsSource="{Binding Notebooks}"
                   SelectedValue="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -46,24 +47,24 @@
                             <uc:NotebookControl.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Rename"
-                                              Command="{Binding Source={StaticResource vm}, Path=RenameNotebookCommand}"/>
+                                              Command="{Binding Path=RenameNotebookCommand, Source={RelativeSource AncestorType=local:NotesView}}"/>
                                     <MenuItem Header="Delete"
-                                              Command="{Binding Source={StaticResource vm}, Path=DeleteNotebookCommand}"
+                                              Command="{Binding Path=DeleteNotebookCommand, Source={RelativeSource AncestorType=local:NotesView}}"
                                               CommandParameter="{Binding Id}" />
                                 </ContextMenu>
                             </uc:NotebookControl.ContextMenu>
                         </uc:NotebookControl>
                         <TextBox Text="{Binding Name, Mode=TwoWay}" 
-                                 Visibility="{Binding Source={StaticResource vm}, Path=RenameNotebookTextboxVisibility}">
+                                 Visibility="{Binding ElementName=notesControl, Path=DataContext.RenameNotebookTextboxVisibility}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="LostFocus">
-                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource vm}, Path=UpdateNotebookCommand}" 
+                                    <i:InvokeCommandAction Command="{Binding ElementName=notesControl, Path=DataContext.UpdateNotebookCommand}" 
                                                            CommandParameter="{Binding}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" 
-                                            Command="{Binding Source={StaticResource vm}, Path=UpdateNotebookEnterCommand}" 
+                                            Command="{Binding ElementName=notesControl, Path=DataContext.UpdateNotebookEnterCommand}" 
                                             CommandParameter="{Binding}"/>
                             </TextBox.InputBindings>
                         </TextBox>
@@ -71,6 +72,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        
         <ListView DockPanel.Dock="Left"
                   MinWidth="180"
                   ItemsSource="{Binding Notes}"
@@ -81,6 +83,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
                 <Button Command="{Binding BoldTextCommand}"
@@ -134,6 +137,7 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
+
         <Grid>
             <uc:RichTextBoxEx x:Name="rtbNote"
                               helpers:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay}" 
