@@ -14,7 +14,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <DockPanel>
-        
+
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="New notebook" 
@@ -27,15 +27,14 @@
                           Command="{Binding ExitApplicationCommand}"/>
             </MenuItem>
         </Menu>
-        
+
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
                 <TextBlock Text="{Binding CurrentNoteCharCountStatusMessage}" />
             </StatusBarItem>
         </StatusBar>
-        
-        <ListView x:Name="nbListView"
-                  DockPanel.Dock="Left"
+
+        <ListView DockPanel.Dock="Left"
                   Background="MidnightBlue"
                   MinWidth="180"
                   ItemsSource="{Binding Notebooks}"
@@ -43,13 +42,14 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <uc:NotebookControl Notebook="{Binding}">
+                        <uc:NotebookControl Notebook="{Binding}"
+                                            Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListView}}">>
                             <uc:NotebookControl.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Rename"
-                                              Command="{Binding Path=RenameNotebookCommand, Source={RelativeSource AncestorType=local:NotesView}}"/>
+                                              Command="{Binding PlacementTarget.Tag.RenameNotebookCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                     <MenuItem Header="Delete"
-                                              Command="{Binding Path=DeleteNotebookCommand, Source={RelativeSource AncestorType=local:NotesView}}"
+                                              Command="{Binding PlacementTarget.Tag.DeleteNotebookCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                               CommandParameter="{Binding Id}" />
                                 </ContextMenu>
                             </uc:NotebookControl.ContextMenu>
@@ -72,7 +72,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
+
         <ListView DockPanel.Dock="Left"
                   MinWidth="180"
                   ItemsSource="{Binding Notes}"
@@ -83,7 +83,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
+
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
                 <Button Command="{Binding BoldTextCommand}"
@@ -133,7 +133,7 @@
                     </i:Interaction.Triggers>
                 </ComboBox>
                 <Button>
-                    
+
                 </Button>
             </ToolBar>
         </ToolBarTray>
