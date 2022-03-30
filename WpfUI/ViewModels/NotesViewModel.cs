@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using WpfUI.Commands;
@@ -14,8 +13,11 @@ namespace WpfUI.ViewModels;
 
 public class NotesViewModel : ViewModelBase
 {
-    public NotesViewModel()
+    private readonly NotesRepositoryFactory _notesRepositoryFactory;
+
+    public NotesViewModel(NotesRepositoryFactory notesRepositoryFactory)
     {
+        _notesRepositoryFactory = notesRepositoryFactory;
         NewNotebookCommand = new NewNotebookCommandAsync(this);
         NewNoteCommand = new NewNoteCommandAsync(this);
         ExitApplicationCommand = new ExitApplicationCommand();
@@ -34,14 +36,15 @@ public class NotesViewModel : ViewModelBase
         SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
         AvailableFontSizes = Enumerable.Range(6, 72).ToList().ConvertAll(i => (double)i);
         SelectedFontSize = 14;
-        RenameNotebookTextboxVisibility = Visibility.Collapsed;
         Notebooks = new();
         Notes = new();
         _ = GetNotebooksAsync();
     }
 
     public ObservableCollection<Notebook> Notebooks { get; set; }
-    
+    public ObservableCollection<Note> Notes { get; set; }
+    public List<double> AvailableFontSizes { get; set; }
+    public ICollection<FontFamily> AvailableFonts { get; }
 
     private Notebook _selectedNotebook;
     public Notebook SelectedNotebook
@@ -58,8 +61,6 @@ public class NotesViewModel : ViewModelBase
             }
         }
     }
-
-    public ObservableCollection<Note> Notes { get; set; }
 
     private Note _selectedNote;
     public Note SelectedNote
@@ -103,8 +104,6 @@ public class NotesViewModel : ViewModelBase
         get => $"Document length: {CurrentNoteCharCount} characters";
     }
 
-    public ICollection<FontFamily> AvailableFonts { get; }
-
     private FontFamily _selectedFont;
     public FontFamily SelectedFont
     {
@@ -116,8 +115,6 @@ public class NotesViewModel : ViewModelBase
         }
     }
 
-    public List<double> AvailableFontSizes { get; set; }
-
     private double _selectedFontSize;
     public double SelectedFontSize
     {
@@ -126,17 +123,6 @@ public class NotesViewModel : ViewModelBase
         {
             _selectedFontSize = value;
             OnPropertyChanged(nameof(SelectedFontSize));
-        }
-    }
-
-    private Visibility _renameNotebookTextboxVisbility;
-    public Visibility RenameNotebookTextboxVisibility
-    {
-        get => _renameNotebookTextboxVisbility;
-        set
-        {
-            _renameNotebookTextboxVisbility = value;
-            OnPropertyChanged(nameof(RenameNotebookTextboxVisibility));
         }
     }
 
@@ -162,7 +148,7 @@ public class NotesViewModel : ViewModelBase
             Name = "New notebook"
         };
 
-        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        using NotesRepository db = _notesRepositoryFactory.CreateRepository();
         int id = await db.CreateNotebook(notebook);
         await GetNotebooksAsync();
         SelectedNotebook = Notebooks.FirstOrDefault(x => x.Id == id);
@@ -178,7 +164,7 @@ public class NotesViewModel : ViewModelBase
             Title = "New note"
         };
 
-        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        using NotesRepository db = _notesRepositoryFactory.CreateRepository();
         int id = await db.CreateNote(newNote);
         await GetNotesAsync();
         SelectedNote = Notes.FirstOrDefault(x => x.Id == id);
@@ -187,7 +173,7 @@ public class NotesViewModel : ViewModelBase
     private async Task GetNotebooksAsync()
     {
         Notebooks.Clear();
-        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        using NotesRepository db = _notesRepositoryFactory.CreateRepository();
         List<Notebook> notebooks = await db.GetAllNotebooks();
         notebooks.ForEach(x => Notebooks.Add(x));
     }
@@ -197,7 +183,7 @@ public class NotesViewModel : ViewModelBase
         if (SelectedNotebook != null)
         {
             Notes.Clear();
-            using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+            using NotesRepository db = _notesRepositoryFactory.CreateRepository();
             List<Note> notes = await db.GetAllNotes(SelectedNotebook.Id);
             notes.ForEach(x => Notes.Add(x));
         }
@@ -205,28 +191,28 @@ public class NotesViewModel : ViewModelBase
 
     public async Task DeleteNoteAsync(int noteId)
     {
-        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        using NotesRepository db = _notesRepositoryFactory.CreateRepository();
         await db.DeleteNote(noteId);
         await GetNotesAsync();
     }
 
     public async Task DeleteNotebookAsync(int notebookId)
     {
-        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        using NotesRepository db = _notesRepositoryFactory.CreateRepository();
         await db.DeleteNotebook(notebookId);
         await GetNotebooksAsync();
         Notes.Clear();
     }
 
-    public void StartEditing()
+    public void StartEditing(int notebookId)
     {
-        RenameNotebookTextboxVisibility = Visibility.Visible;
+
     }
 
     public async Task StopEditingAsync(Notebook notebook)
     {
-        RenameNotebookTextboxVisibility = Visibility.Collapsed;
-        using NotesRepository db = NotesRepositoryFactory.CreateRepository();
+        //RenameNotebookTextboxVisibility = Visibility.Collapsed;
+        using NotesRepository db = _notesRepositoryFactory.CreateRepository();
         await db.UpdateNotebook(notebook);
         await GetNotebooksAsync();
     }

@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="WpfUI.Views.NotebookControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfUI.Views"
+             xmlns:vms="clr-namespace:WpfUI.ViewModels"
+             xmlns:e="clr-namespace:DataAccessLibrary.Entities;assembly=DataAccessLibrary"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             d:DataContext="{d:DesignInstance Type=e:Notebook}"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="150">
+    
+    <Grid>
+        <TextBlock Text="{Binding Name}" 
+                   Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext}"
+                   Foreground="White"
+                   Margin="15"
+                   FontSize="20"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center">
+            <TextBlock.ContextMenu>
+                <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                    <MenuItem Header="Rename"
+                      Command="{Binding RenameNotebookCommand}"
+                      CommandParameter="{Binding SelectedNotebook.Id}"/>
+                    <MenuItem Header="Delete"
+                      Command="{Binding DeleteNotebookCommand}"
+                      CommandParameter="{Binding SelectedNotebook.Id}" />
+                </ContextMenu>
+            </TextBlock.ContextMenu>
+        </TextBlock>
+        <TextBox Text="{Binding Name, Mode=TwoWay}"
+                 Visibility="Collapsed">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="LostFocus">
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNotebookCommand}"
+                                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.SelectedNotebook}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <TextBox.InputBindings>
+                <KeyBinding Key="Enter" 
+                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNotebookCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.SelectedNotebook}"/>
+            </TextBox.InputBindings>
+        </TextBox>
+    </Grid>
+</UserControl>

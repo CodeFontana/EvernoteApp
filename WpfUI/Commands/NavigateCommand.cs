@@ -1,25 +1,41 @@
-﻿using WpfUI.State;
-using WpfUI.ViewModels.Factory;
-using static WpfUI.ViewModels.Factory.ViewModelFactory;
+﻿using DataAccessLibrary.Notes;
+using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
 
 public class NavigateCommand : CommandBase
 {
-    private readonly Navigator _navigator;
-    private readonly ViewModelFactory _viewModelFactory;
+    private readonly MainViewModel _mainViewModel;
+    private readonly NotesRepositoryFactory _notesRepositoryFactory;
 
-    public NavigateCommand(Navigator navigator, ViewModelFactory viewModelFactory)
+    public enum ViewType
     {
-        _navigator = navigator;
-        _viewModelFactory = viewModelFactory;
+        Login,
+        Notes
+    }
+
+
+    public NavigateCommand(MainViewModel mainViewModel, NotesRepositoryFactory notesRepositoryFactory)
+    {
+        _mainViewModel = mainViewModel;
+        _notesRepositoryFactory = notesRepositoryFactory;
     }
 
     public override void Execute(object parameter)
     {
         if (parameter is ViewType viewType)
         {
-            _navigator.CurrentViewModel = _viewModelFactory.CreateViewModel(viewType);
+            switch (viewType)
+            {
+                case ViewType.Notes:
+                    _mainViewModel.CurrentVM = new NotesViewModel(_notesRepositoryFactory);
+                    break;
+                case ViewType.Login:
+                    _mainViewModel.CurrentVM = new LoginViewModel();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

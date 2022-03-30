@@ -7,9 +7,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Windows;
-using WpfUI.State;
 using WpfUI.ViewModels;
-using WpfUI.ViewModels.Factory;
 
 namespace WpfUI;
 
@@ -39,12 +37,10 @@ public partial class App : Application
                     {
                         options.UseSqlite($@"Data Source={Environment.CurrentDirectory}\Notes.db;");
                     });
-                    services.AddSingleton<ViewModelFactory>();
-                    services.AddSingleton<NotesViewModelFactory>();
-                    services.AddSingleton<LoginViewModelFactory>();
-                    services.AddScoped<Navigator>();
+                    services.AddScoped(sp => new NotesDbContextFactory($@"Data Source={Environment.CurrentDirectory}\Notes.db;"));
+                    services.AddScoped<NotesRepositoryFactory>();
                     services.AddScoped<MainViewModel>();
-                    services.AddScoped<MainWindow>(sp => new MainWindow(sp.GetRequiredService<MainViewModel>()));
+                    services.AddScoped(sp => new MainWindow(sp.GetRequiredService<MainViewModel>()));
                 })
                 .UseSerilog((context, services, loggerConfiguration) =>
                     loggerConfiguration.ReadFrom.Configuration(context.Configuration))

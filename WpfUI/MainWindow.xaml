@@ -3,12 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfUI"
-        xmlns:vms="clr-namespace:WpfUI.ViewModels" 
-        d:DataContext="{d:DesignInstance Type=vms:MainViewModel}"
+        xmlns:local="clr-namespace:WpfUI" 
+        xmlns:vm="clr-namespace:WpfUI.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" 
         Height="600" Width="900">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -21,6 +22,6 @@
         <ContentControl Grid.Row="0" 
                         Grid.Column="0" 
                         Margin="0 0 0 0"
-                        Content="{Binding Navigator.CurrentViewModel}" />
+                        Content="{Binding CurrentVM}" />
     </Grid>
 </Window>

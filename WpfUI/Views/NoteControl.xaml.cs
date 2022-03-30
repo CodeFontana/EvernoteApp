@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfUI.Controls;
+namespace WpfUI.Views;
 
 public partial class NoteControl : UserControl
 {

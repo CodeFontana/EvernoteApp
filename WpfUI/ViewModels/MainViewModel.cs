@@ -1,21 +1,22 @@
-﻿using System.Windows.Input;
+﻿using DataAccessLibrary.Notes;
+using System.Windows.Input;
 using WpfUI.Commands;
-using WpfUI.State;
-using WpfUI.ViewModels.Factory;
-using static WpfUI.ViewModels.Factory.ViewModelFactory;
+using static WpfUI.Commands.NavigateCommand;
 
 namespace WpfUI.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    public MainViewModel(Navigator navigator, ViewModelFactory viewModelFactory)
+    public MainViewModel(NotesRepositoryFactory notesRepositoryFactory)
     {
-        Navigator = navigator;
-        NavigateCommand = new NavigateCommand(navigator, viewModelFactory);
+        
+        NavigateCommand = new NavigateCommand(this, notesRepositoryFactory);
         NavigateCommand.Execute(ViewType.Notes);
     }
 
-    public Navigator Navigator { get; }
+    public ViewModelBase CurrentVM { get; set; }
+    public NotesViewModel NotesVM { get; set; }
+    public LoginViewModel LoginVM { get; set; }
 
     public ICommand NavigateCommand { get; set; }
 }
