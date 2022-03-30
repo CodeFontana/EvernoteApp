@@ -204,16 +204,17 @@ public class NotesViewModel : ViewModelBase
         Notes.Clear();
     }
 
-    public void StartEditing(int notebookId)
+    public void StartEditing()
     {
-
+        SelectedNotebook.IsEditMode = true;
     }
 
     public async Task StopEditingAsync(Notebook notebook)
     {
-        //RenameNotebookTextboxVisibility = Visibility.Collapsed;
         using NotesRepository db = _notesRepositoryFactory.CreateRepository();
         await db.UpdateNotebook(notebook);
         await GetNotebooksAsync();
+        SelectedNotebook = Notebooks.First(x => x.Id == notebook.Id);
+        SelectedNotebook.IsEditMode = false;
     }
 }

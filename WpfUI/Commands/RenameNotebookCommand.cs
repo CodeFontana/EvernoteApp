@@ -13,9 +13,6 @@ public class RenameNotebookCommand : CommandBase
 
     public override void Execute(object parameter)
     {
-        if (parameter is int notebookId)
-        {
-            _notesViewModel.StartEditing(notebookId);
-        }
+        _notesViewModel.StartEditing();
     }
 }
