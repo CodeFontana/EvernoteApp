@@ -61,8 +61,6 @@ public class NotesRepository : INotesRepository, IDisposable
 
     public async Task DeleteNotebook(int notebookId)
     {
-        IQueryable<Note> notes = _db.Notes.Where(x => x.NotebookId == notebookId);
-        notes?.ToList().ForEach(async n => await DeleteNote(n.Id));
         Notebook notebook = _db.Notebooks.FirstOrDefault(n => n.Id == notebookId);
 
         if (notebook != null)

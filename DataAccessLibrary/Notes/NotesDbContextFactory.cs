@@ -4,10 +4,17 @@ namespace DataAccessLibrary.Notes;
 
 public class NotesDbContextFactory
 {
-    public static NotesDbContext CreateDbContext()
+    private readonly string _connectionString;
+
+    public NotesDbContextFactory(string connectionString)
+    {
+        _connectionString = connectionString;
+    }
+
+    public NotesDbContext CreateDbContext()
     {
         DbContextOptionsBuilder<NotesDbContext> options = new();
-        options.UseSqlite($@"Data Source={Environment.CurrentDirectory}\Notes.db;");
+        options.UseSqlite(_connectionString);
         return new NotesDbContext(options.Options);
     }
 }

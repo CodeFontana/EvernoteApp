@@ -17,8 +17,11 @@ public class NotesDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        EntityTypeBuilder<Note> note = modelBuilder.Entity<Note>();
-        EntityTypeBuilder<Notebook> notebook = modelBuilder.Entity<Notebook>();
         EntityTypeBuilder<User> user = modelBuilder.Entity<User>();
+        EntityTypeBuilder<Notebook> notebook = modelBuilder.Entity<Notebook>();
+        EntityTypeBuilder<Note> note = modelBuilder.Entity<Note>();
+
+        //user.HasMany(u => u.Notebooks);  <-- Will add after implementing Users logins
+        notebook.HasMany(n => n.Notes);
     }
 }
