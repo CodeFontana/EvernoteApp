@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:WpfUI.ViewModels" 
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="Evernote" 
         Height="600" Width="1200">
 
     <Grid>
