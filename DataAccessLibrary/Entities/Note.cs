@@ -21,8 +21,7 @@ public class Note : ObservableObject
 
         set
         {
-            _title = value;
-            OnPropertyChanged(nameof(Title));
+            OnPropertyChanged(ref _title, value);
         }
     }
 
@@ -38,8 +37,7 @@ public class Note : ObservableObject
 
         set
         {
-            _updatedAt = value;
-            OnPropertyChanged(nameof(UpdatedAt));
+            OnPropertyChanged(ref _updatedAt, value);
         }
     }
 
@@ -56,8 +54,7 @@ public class Note : ObservableObject
 
         set
         {
-            _isEditMode = value;
-            OnPropertyChanged(nameof(IsEditMode));
+            OnPropertyChanged(ref _isEditMode, value);
             OnPropertyChanged(nameof(IsDisplayMode));
         }
     }

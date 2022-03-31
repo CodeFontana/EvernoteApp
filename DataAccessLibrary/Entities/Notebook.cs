@@ -20,8 +20,7 @@ public class Notebook : ObservableObject
 
         set
         {
-            _name = value;
-            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(ref _name, value);
         }
     }
 
@@ -36,8 +35,7 @@ public class Notebook : ObservableObject
 
         set
         {
-            _isEditMode = value;
-            OnPropertyChanged(nameof(IsEditMode));
+            OnPropertyChanged(ref _isEditMode, value);
             OnPropertyChanged(nameof(IsDisplayMode));
         }
     }
