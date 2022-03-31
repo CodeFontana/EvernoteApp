@@ -9,8 +9,6 @@ public class Notebook : ObservableObject
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    //public int UserId { get; set; }
-
     private string _name;
     [Required]
     public string Name

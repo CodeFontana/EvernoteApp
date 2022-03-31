@@ -16,7 +16,6 @@ public class MainViewModel : ViewModelBase
 
     public ViewModelBase CurrentVM { get; set; }
     public NotesViewModel NotesVM { get; set; }
-    public LoginViewModel LoginVM { get; set; }
 
     public ICommand NavigateCommand { get; set; }
 }

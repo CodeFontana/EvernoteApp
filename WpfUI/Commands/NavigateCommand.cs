@@ -30,9 +30,6 @@ public class NavigateCommand : CommandBase
                 case ViewType.Notes:
                     _mainViewModel.CurrentVM = new NotesViewModel(_notesRepositoryFactory);
                     break;
-                case ViewType.Login:
-                    _mainViewModel.CurrentVM = new LoginViewModel();
-                    break;
                 default:
                     break;
             }

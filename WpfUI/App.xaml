@@ -12,10 +12,6 @@
                 <ResourceDictionary Source="/Styles/Common.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <DataTemplate DataType="{x:Type vms:LoginViewModel}">
-                <views:LoginView />
-            </DataTemplate>
-
             <DataTemplate DataType="{x:Type vms:NotesViewModel}">
                 <views:NotesView />
             </DataTemplate>
