@@ -14,9 +14,6 @@ public class DeleteNoteCommand : CommandBaseAsync
 
     public override async Task ExecuteAsync(object parameter)
     {
-        if (parameter is int noteId)
-        {
-            await _notesViewModel.DeleteNoteAsync(noteId);
-        }
+        await _notesViewModel.DeleteNoteAsync(_notesViewModel.SelectedNote.Id);
     }
 }

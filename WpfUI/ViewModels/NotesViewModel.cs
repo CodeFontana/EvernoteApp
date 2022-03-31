@@ -57,8 +57,7 @@ public class NotesViewModel : ViewModelBase
         get => _selectedNotebook;
         set
         {
-            _selectedNotebook = value;
-            OnPropertyChanged(nameof(SelectedNotebook));
+            OnPropertyChanged(ref _selectedNotebook, value);
 
             if (_selectedNotebook != null)
             {
@@ -77,8 +76,7 @@ public class NotesViewModel : ViewModelBase
         set
         {
             SaveNote();
-            _selectedNote = value;
-            OnPropertyChanged(nameof(SelectedNote));
+            OnPropertyChanged(ref _selectedNote, value);
             LoadNote();
         }
     }
@@ -89,8 +87,7 @@ public class NotesViewModel : ViewModelBase
         get => _currentNoteXaml;
         set
         {
-            _currentNoteXaml = value;
-            OnPropertyChanged(nameof(CurrentNoteXaml));
+            OnPropertyChanged(ref _currentNoteXaml, value);
         }
     }
 
@@ -100,8 +97,7 @@ public class NotesViewModel : ViewModelBase
         get => _currentNoteCharCount;
         set
         {
-            _currentNoteCharCount = value;
-            OnPropertyChanged(nameof(CurrentNoteCharCount));
+            OnPropertyChanged(ref _currentNoteCharCount, value);
             OnPropertyChanged(nameof(CurrentNoteCharCountStatusMessage));
         }
     }
@@ -117,8 +113,7 @@ public class NotesViewModel : ViewModelBase
         get => _selectedFont;
         set
         {
-            _selectedFont = value;
-            OnPropertyChanged(nameof(SelectedFont));
+            OnPropertyChanged(ref _selectedFont, value);
         }
     }
 
@@ -128,8 +123,7 @@ public class NotesViewModel : ViewModelBase
         get => _selectedFontSize;
         set
         {
-            _selectedFontSize = value;
-            OnPropertyChanged(nameof(SelectedFontSize));
+            OnPropertyChanged(ref _selectedFontSize, value);
         }
     }
 
@@ -220,6 +214,12 @@ public class NotesViewModel : ViewModelBase
     {
         using NotesRepository db = _notesRepositoryFactory.CreateRepository();
         await db.DeleteNote(noteId);
+
+        if (File.Exists(SelectedNote.FileLocation))
+        {
+            File.Delete(SelectedNote.FileLocation);
+        }
+        
         await GetNotesAsync();
     }
 
@@ -227,6 +227,12 @@ public class NotesViewModel : ViewModelBase
     {
         using NotesRepository db = _notesRepositoryFactory.CreateRepository();
         await db.DeleteNotebook(notebookId);
+
+        if (Directory.Exists($@"{_notesSavePath}\{SelectedNotebook.Name}"))
+        {
+            Directory.Delete($@"{_notesSavePath}\{SelectedNotebook.Name}", true);
+        }
+        
         await GetNotebooksAsync();
         Notes.Clear();
     }
@@ -278,6 +284,19 @@ public class NotesViewModel : ViewModelBase
     {
         if (SelectedNote != null)
         {
+            using NotesRepository db = _notesRepositoryFactory.CreateRepository();
+            bool noteExistsInDb = db.ExistsNote(SelectedNote.Id).Result;
+
+            if (noteExistsInDb == false)
+            {
+                return;
+            }
+
+            if (SelectedNotebook == null)
+            {
+                SelectedNotebook = Notebooks.FirstOrDefault(x => x.Id == SelectedNote.NotebookId);
+            }
+
             SelectedNote.FileLocation = $@"{_notesSavePath}\{SelectedNotebook.Name}\{SelectedNote.Id}-{SelectedNote.Title}.rtf";
             SelectedNote.UpdatedAt = DateTime.Now;
             _ = UpdateNoteAsync();
