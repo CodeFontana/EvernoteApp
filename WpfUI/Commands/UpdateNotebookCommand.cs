@@ -4,22 +4,17 @@ using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
 
-public class NewNoteCommandAsync : CommandBaseAsync
+public class UpdateNotebookCommand : CommandBaseAsync
 {
     private readonly NotesViewModel _notesViewModel;
 
-    public NewNoteCommandAsync(NotesViewModel notesViewModel)
+    public UpdateNotebookCommand(NotesViewModel notesViewModel)
     {
         _notesViewModel = notesViewModel;
     }
 
     public override async Task ExecuteAsync(object parameter)
     {
-        Notebook selectedNotebook = parameter as Notebook;
-
-        if (selectedNotebook != null)
-        {
-            await _notesViewModel.CreateNoteAsync(selectedNotebook.Id);
-        }
+        await _notesViewModel.StopEditingNotebookAsync();
     }
 }

@@ -2,17 +2,17 @@
 
 namespace WpfUI.Commands;
 
-public class RenameNotebookCommand : CommandBase
+public class RenameNoteCommand : CommandBase
 {
     private readonly NotesViewModel _notesViewModel;
 
-    public RenameNotebookCommand(NotesViewModel notesViewModel)
+    public RenameNoteCommand(NotesViewModel notesViewModel)
     {
         _notesViewModel = notesViewModel;
     }
 
     public override void Execute(object parameter)
     {
-        _notesViewModel.StartEditingNotebook();
+        _notesViewModel.StartEditingNote();
     }
 }

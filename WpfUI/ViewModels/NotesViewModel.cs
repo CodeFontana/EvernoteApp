@@ -15,12 +15,14 @@ namespace WpfUI.ViewModels;
 public class NotesViewModel : ViewModelBase
 {
     private readonly NotesRepositoryFactory _notesRepositoryFactory;
+    private readonly string _notesSavePath;
 
     public NotesViewModel(NotesRepositoryFactory notesRepositoryFactory)
     {
         _notesRepositoryFactory = notesRepositoryFactory;
-        NewNotebookCommand = new NewNotebookCommandAsync(this);
-        NewNoteCommand = new NewNoteCommandAsync(this);
+        _notesSavePath = $@"{Environment.CurrentDirectory}\Notes";
+        NewNotebookCommand = new NewNotebookCommand(this);
+        NewNoteCommand = new NewNoteCommand(this);
         ExitApplicationCommand = new ExitApplicationCommand();
         NoteTextChangedCommand = new NoteTextChangedCommand(this);
         BoldTextCommand = new BoldTextCommand(this);
@@ -29,10 +31,11 @@ public class NotesViewModel : ViewModelBase
         FontFamilyChangedCommand = new FontFamilyChangedCommand(this);
         FontSizeChangedCommand = new FontSizeChangedCommand(this);
         RenameNotebookCommand = new RenameNotebookCommand(this);
-        UpdateNotebookCommand = new UpdateNotebookCommandAsync(this);
-        UpdateNotebookEnterCommand = new UpdateNotebookEnterCommandAsync(this);
-        DeleteNoteCommand = new DeleteNoteCommandAsync(this);
-        DeleteNotebookCommand = new DeleteNotebookCommandAsync(this);
+        RenameNoteCommand = new RenameNoteCommand(this);
+        UpdateNotebookCommand = new UpdateNotebookCommand(this);
+        UpdateNoteCommand = new UpdateNoteCommand(this);
+        DeleteNoteCommand = new DeleteNoteCommand(this);
+        DeleteNotebookCommand = new DeleteNotebookCommand(this);
         SaveNoteCommand = new SaveNoteCommand(this);
         AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
         SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
@@ -140,8 +143,9 @@ public class NotesViewModel : ViewModelBase
     public ICommand FontFamilyChangedCommand { get; private set; }
     public ICommand FontSizeChangedCommand { get; private set; }
     public ICommand RenameNotebookCommand { get; private set; }
+    public ICommand RenameNoteCommand { get; private set; }
     public ICommand UpdateNotebookCommand { get; private set; }
-    public ICommand UpdateNotebookEnterCommand { get; private set; }
+    public ICommand UpdateNoteCommand { get; private set; }
     public ICommand DeleteNoteCommand { get; private set; }
     public ICommand DeleteNotebookCommand { get; private set; }
     public ICommand SaveNoteCommand { get; private set; }
@@ -227,15 +231,37 @@ public class NotesViewModel : ViewModelBase
         Notes.Clear();
     }
 
-    public void StartEditing()
+    public void StartEditingNotebook()
     {
         SelectedNotebook.IsEditMode = true;
     }
-
-    public async Task StopEditingAsync()
+    public async Task StopEditingNotebookAsync()
     {
         await UpdateNotebookAsync();
         SelectedNotebook.IsEditMode = false;
+    }
+    
+    public void StartEditingNote()
+    {
+        SelectedNote.IsEditMode = true;
+    }
+
+    public async Task StopEditingNoteAsync()
+    {
+        using NotesRepository db = _notesRepositoryFactory.CreateRepository();
+        Note existingNote = await db.GetNote(SelectedNote.Id);
+        
+        await UpdateNoteAsync();
+
+        string existingFile = $@"{_notesSavePath}\{SelectedNotebook.Name}\{SelectedNote.Id}-{existingNote.Title}.rtf";
+        string newFile = $@"{_notesSavePath}\{SelectedNotebook.Name}\{SelectedNote.Id}-{SelectedNote.Title}.rtf";
+
+        if (File.Exists(existingFile))
+        {
+            File.Move(existingFile, newFile);
+        }
+
+        SelectedNote.IsEditMode = false;
     }
 
     public void LoadNote()
@@ -252,11 +278,10 @@ public class NotesViewModel : ViewModelBase
     {
         if (SelectedNote != null)
         {
-            string rtfFile = Path.Combine($@"{Environment.CurrentDirectory}\Notes\{SelectedNote.Id}-{SelectedNote.Title}.rtf");
-            SelectedNote.FileLocation = rtfFile;
+            SelectedNote.FileLocation = $@"{_notesSavePath}\{SelectedNotebook.Name}\{SelectedNote.Id}-{SelectedNote.Title}.rtf";
             SelectedNote.UpdatedAt = DateTime.Now;
             _ = UpdateNoteAsync();
-            Directory.CreateDirectory($@"{Environment.CurrentDirectory}\Notes");
+            Directory.CreateDirectory($@"{_notesSavePath}\{SelectedNotebook.Name}");
             File.WriteAllText(SelectedNote.FileLocation, CurrentNoteXaml);
         }
     }

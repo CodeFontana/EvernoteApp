@@ -3,33 +3,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WpfUI.Views"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:local="clr-namespace:WpfUI.Views" 
+             xmlns:entities="clr-namespace:DataAccessLibrary.Entities;assembly=DataAccessLibrary" 
+             d:DataContext="{d:DesignInstance Type=entities:Note}"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="300">
+    
     <Border BorderThickness="2" 
             BorderBrush="{StaticResource AlmostBlack}"
             CornerRadius="5">
-        <StackPanel Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext}"
-                    Background="{StaticResource TwinkleBlue}">
-            <TextBlock Text="{Binding Title}" 
-                   Foreground="Black"
-                   Margin="10 5 10 5"
-                   FontSize="20"
-                   FontWeight="Bold"
-                   VerticalAlignment="Center"/>
-            <TextBlock Text="{Binding UpdatedAt}" 
-                   Foreground="{StaticResource GloomyPurple}"
-                   Margin="10 5 10 5"
-                   FontSize="14"
-                   VerticalAlignment="Center"/>
-            <StackPanel.ContextMenu>
-                <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                    <MenuItem Header="Rename"
-                      Command="{Binding RenameNoteCommand}"/>
-                    <MenuItem Header="Delete"
-                      Command="{Binding DeleteNoteCommand}"/>
-                </ContextMenu>
-            </StackPanel.ContextMenu>
-        </StackPanel>
+        <Grid>
+            <Grid Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext}"
+                  Background="{StaticResource TwinkleBlue}"
+                  Visibility="{Binding IsDisplayMode, Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                
+                <TextBlock Grid.Row="0"
+                           Text="{Binding Title}" 
+                           Foreground="Black"
+                           Margin="10 5 10 5"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"/>
+                <TextBlock  Grid.Row="1"
+                           Text="{Binding UpdatedAt}" 
+                           Foreground="{StaticResource GloomyPurple}"
+                           Margin="10 5 10 5"
+                           FontSize="14"
+                           VerticalAlignment="Center"/>
+                
+                <Grid.ContextMenu>
+                    <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                        <MenuItem Header="Rename"
+                                  Command="{Binding RenameNoteCommand}"/>
+                        <MenuItem Header="Delete"
+                                  Command="{Binding DeleteNoteCommand}"/>
+                    </ContextMenu>
+                </Grid.ContextMenu>
+                
+            </Grid>
+
+            <Grid Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                
+                <Grid>
+                    <TextBox Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="18"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             HorizontalContentAlignment="Center">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="LostFocus">
+                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNoteCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" 
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNoteCommand}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+                </Grid>
+                
+            </Grid>
+            
+        </Grid>
     </Border>
+    
 </UserControl>

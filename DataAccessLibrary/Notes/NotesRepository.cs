@@ -37,6 +37,11 @@ public class NotesRepository : INotesRepository, IDisposable
         return await _db.Notes.Where(x => x.NotebookId == notebookId).ToListAsync();
     }
 
+    public async Task<Note> GetNote(int noteId)
+    {
+        return await _db.Notes.FirstOrDefaultAsync(x => x.Id == noteId);
+    }
+
     public async Task UpdateNotebook(Notebook notebook)
     {
         Notebook nb = _db.Notebooks.FirstOrDefault(x => x.Id == notebook.Id);
