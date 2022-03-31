@@ -3,6 +3,7 @@ using DataAccessLibrary.Notes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -32,6 +33,7 @@ public class NotesViewModel : ViewModelBase
         UpdateNotebookEnterCommand = new UpdateNotebookEnterCommandAsync(this);
         DeleteNoteCommand = new DeleteNoteCommandAsync(this);
         DeleteNotebookCommand = new DeleteNotebookCommandAsync(this);
+        SaveNoteCommand = new SaveNoteCommand(this);
         AvailableFonts = Fonts.SystemFontFamilies.OrderBy(f => f.Source).ToList();
         SelectedFont = AvailableFonts.FirstOrDefault(x => x.Source == "Segoe UI");
         AvailableFontSizes = Enumerable.Range(6, 72).ToList().ConvertAll(i => (double)i);
@@ -73,6 +75,7 @@ public class NotesViewModel : ViewModelBase
         {
             _selectedNote = value;
             OnPropertyChanged(nameof(SelectedNote));
+            LoadNote();
         }
     }
 
@@ -126,20 +129,21 @@ public class NotesViewModel : ViewModelBase
         }
     }
 
-    public ICommand NewNotebookCommand { get; set; }
-    public ICommand NewNoteCommand { get; set; }
-    public ICommand ExitApplicationCommand { get; set; }
-    public ICommand NoteTextChangedCommand { get; set; }
-    public ICommand BoldTextCommand { get; set; }
-    public ICommand ItalicTextCommand { get; set; }
-    public ICommand UnderlineTextCommand { get; set; }
-    public ICommand FontFamilyChangedCommand { get; set; }
-    public ICommand FontSizeChangedCommand { get; set; }
-    public ICommand RenameNotebookCommand { get; set; }
-    public ICommand UpdateNotebookCommand { get; set; }
-    public ICommand UpdateNotebookEnterCommand { get; set; }
-    public ICommand DeleteNoteCommand { get; set; }
-    public ICommand DeleteNotebookCommand { get; set; }
+    public ICommand NewNotebookCommand { get; private set; }
+    public ICommand NewNoteCommand { get; private set; }
+    public ICommand ExitApplicationCommand { get; private set; }
+    public ICommand NoteTextChangedCommand { get; private set; }
+    public ICommand BoldTextCommand { get; private set; }
+    public ICommand ItalicTextCommand { get; private set; }
+    public ICommand UnderlineTextCommand { get; private set; }
+    public ICommand FontFamilyChangedCommand { get; private set; }
+    public ICommand FontSizeChangedCommand { get; private set; }
+    public ICommand RenameNotebookCommand { get; private set; }
+    public ICommand UpdateNotebookCommand { get; private set; }
+    public ICommand UpdateNotebookEnterCommand { get; private set; }
+    public ICommand DeleteNoteCommand { get; private set; }
+    public ICommand DeleteNotebookCommand { get; private set; }
+    public ICommand SaveNoteCommand { get; private set; }
 
     public async Task CreateNotebookAsync()
     {
@@ -172,10 +176,16 @@ public class NotesViewModel : ViewModelBase
 
     private async Task GetNotebooksAsync()
     {
+        Notebook curNotebook = SelectedNotebook;
         Notebooks.Clear();
         using NotesRepository db = _notesRepositoryFactory.CreateRepository();
         List<Notebook> notebooks = await db.GetAllNotebooks();
         notebooks.ForEach(x => Notebooks.Add(x));
+
+        if (curNotebook != null)
+        {
+            SelectedNotebook = Notebooks.FirstOrDefault(x => x.Id == curNotebook.Id);
+        }
     }
 
     private async Task GetNotesAsync()
@@ -187,6 +197,18 @@ public class NotesViewModel : ViewModelBase
             List<Note> notes = await db.GetAllNotes(SelectedNotebook.Id);
             notes.ForEach(x => Notes.Add(x));
         }
+    }
+
+    public async Task UpdateNotebookAsync()
+    {
+        using NotesRepository db = _notesRepositoryFactory.CreateRepository();
+        await db.UpdateNotebook(SelectedNotebook);
+    }
+
+    public async Task UpdateNoteAsync()
+    {
+        using NotesRepository db = _notesRepositoryFactory.CreateRepository();
+        await db.UpdateNote(SelectedNote);
     }
 
     public async Task DeleteNoteAsync(int noteId)
@@ -209,12 +231,32 @@ public class NotesViewModel : ViewModelBase
         SelectedNotebook.IsEditMode = true;
     }
 
-    public async Task StopEditingAsync(Notebook notebook)
+    public async Task StopEditingAsync()
     {
-        using NotesRepository db = _notesRepositoryFactory.CreateRepository();
-        await db.UpdateNotebook(notebook);
-        await GetNotebooksAsync();
-        SelectedNotebook = Notebooks.First(x => x.Id == notebook.Id);
+        await UpdateNotebookAsync();
         SelectedNotebook.IsEditMode = false;
+    }
+
+    public void LoadNote()
+    {
+        if (SelectedNote != null && File.Exists(SelectedNote.FileLocation))
+        {
+            CurrentNoteXaml = File.ReadAllText(SelectedNote.FileLocation);
+        }
+        else
+        {
+            CurrentNoteXaml = "";
+        }
+    }
+
+    public async Task SaveNote()
+    {
+        if (SelectedNote != null)
+        {
+            string rtfFile = Path.Combine(Environment.CurrentDirectory, $"{SelectedNote.Id}.rtf");
+            SelectedNote.FileLocation = rtfFile;
+            await UpdateNoteAsync();
+            File.WriteAllText(SelectedNote.FileLocation, CurrentNoteXaml);
+        }
     }
 }

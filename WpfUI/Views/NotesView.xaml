@@ -104,15 +104,14 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ComboBox>
-                <Button>
-
-                </Button>
+                <Button Content="Save"
+                        Command="{Binding SaveNoteCommand}"/>
             </ToolBar>
         </ToolBarTray>
 
         <Grid>
             <uc:RichTextBoxEx x:Name="rtbNote"
-                              h:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay}" 
+                              h:RichTextBoxHelper.DocumentXaml="{Binding CurrentNoteXaml, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                               CurrentFontFamily="{Binding SelectedFont, Mode=TwoWay}"
                               FontSize="{Binding SelectedFontSize}">
                 <i:Interaction.Triggers>
