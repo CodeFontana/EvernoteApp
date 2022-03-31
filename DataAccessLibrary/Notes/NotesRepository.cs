@@ -42,6 +42,11 @@ public class NotesRepository : INotesRepository, IDisposable
         return await _db.Notes.FirstOrDefaultAsync(x => x.Id == noteId);
     }
 
+    public async Task<bool> ExistsNote(int noteId)
+    {
+        return await _db.Notes.AnyAsync(x => x.Id == noteId);
+    }
+
     public async Task UpdateNotebook(Notebook notebook)
     {
         Notebook nb = _db.Notebooks.FirstOrDefault(x => x.Id == notebook.Id);
