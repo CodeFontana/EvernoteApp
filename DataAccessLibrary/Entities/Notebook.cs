@@ -11,8 +11,21 @@ public class Notebook : ObservableObject
 
     //public int UserId { get; set; }
 
+    private string _name;
     [Required]
-    public string Name { get; set; }
+    public string Name
+    {
+        get
+        {
+            return _name;
+        }
+
+        set
+        {
+            _name = value;
+            OnPropertyChanged(nameof(Name));
+        }
+    }
 
     private bool _isEditMode;
     [NotMapped]
