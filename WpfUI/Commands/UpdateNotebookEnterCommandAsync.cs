@@ -15,9 +15,6 @@ public class UpdateNotebookEnterCommandAsync : CommandBaseAsync
 
     public override async Task ExecuteAsync(object parameter)
     {
-        if (parameter is Notebook notebook)
-        {
-            await _notesViewModel.StopEditingAsync(notebook);
-        }
+        await _notesViewModel.StopEditingAsync();
     }
 }
