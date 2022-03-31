@@ -36,14 +36,12 @@
                  Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="LostFocus">
-                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNotebookCommand}"
-                                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.SelectedNotebook}"/>
+                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNotebookCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <TextBox.InputBindings>
                 <KeyBinding Key="Enter" 
-                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNotebookCommand}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.SelectedNotebook}"/>
+                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNotebookCommand}"/>
             </TextBox.InputBindings>
         </TextBox>
     </Grid>
