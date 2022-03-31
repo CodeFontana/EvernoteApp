@@ -12,6 +12,9 @@
              d:DesignHeight="50" d:DesignWidth="150">
     
     <Border BorderThickness="2" BorderBrush="White" CornerRadius="2">
+        <Border.Effect>
+            <DropShadowEffect ShadowDepth="2" Direction="270"/>
+        </Border.Effect>
         <Grid>
             <Grid Visibility="{Binding IsDisplayMode, Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}"
                   Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext}">

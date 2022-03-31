@@ -43,7 +43,7 @@
                   SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <local:NotebookControl />
+                    <local:NotebookControl Margin="0 5 0 5"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -57,7 +57,7 @@
                   SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <local:NoteControl Note="{Binding}" />
+                    <local:NoteControl Note="{Binding}" Margin="0 2 0 2"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
