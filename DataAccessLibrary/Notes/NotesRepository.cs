@@ -48,6 +48,21 @@ public class NotesRepository : INotesRepository, IDisposable
         }
     }
 
+    public async Task UpdateNote(Note note)
+    {
+        Note n = _db.Notes.FirstOrDefault(x => x.Id == note.Id);
+
+        if (n != null)
+        {
+            n.NotebookId = note.NotebookId;
+            n.Title = note.Title;
+            n.CreatedAt = note.CreatedAt;
+            n.UpdatedAt = note.UpdatedAt;
+            n.FileLocation = note.FileLocation;
+            await _db.SaveChangesAsync();
+        }
+    }
+
     public async Task DeleteNote(int noteId)
     {
         Note note = _db.Notes.FirstOrDefault(x => x.Id == noteId);
