@@ -73,6 +73,7 @@ public class NotesViewModel : ViewModelBase
         }
         set
         {
+            SaveNote();
             _selectedNote = value;
             OnPropertyChanged(nameof(SelectedNote));
             LoadNote();
@@ -239,23 +240,23 @@ public class NotesViewModel : ViewModelBase
 
     public void LoadNote()
     {
+        CurrentNoteXaml = "";
+
         if (SelectedNote != null && File.Exists(SelectedNote.FileLocation))
         {
             CurrentNoteXaml = File.ReadAllText(SelectedNote.FileLocation);
         }
-        else
-        {
-            CurrentNoteXaml = "";
-        }
     }
 
-    public async Task SaveNote()
+    public void SaveNote()
     {
         if (SelectedNote != null)
         {
-            string rtfFile = Path.Combine(Environment.CurrentDirectory, $"{SelectedNote.Id}.rtf");
+            string rtfFile = Path.Combine($@"{Environment.CurrentDirectory}\Notes\{SelectedNote.Id}-{SelectedNote.Title}.rtf");
             SelectedNote.FileLocation = rtfFile;
-            await UpdateNoteAsync();
+            SelectedNote.UpdatedAt = DateTime.Now;
+            _ = UpdateNoteAsync();
+            Directory.CreateDirectory($@"{Environment.CurrentDirectory}\Notes");
             File.WriteAllText(SelectedNote.FileLocation, CurrentNoteXaml);
         }
     }

@@ -44,4 +44,24 @@ public class Note : ObservableObject
     }
 
     public string FileLocation { get; set; }
+
+    private bool _isEditMode;
+    [NotMapped]
+    public bool IsEditMode
+    {
+        get
+        {
+            return _isEditMode;
+        }
+
+        set
+        {
+            _isEditMode = value;
+            OnPropertyChanged(nameof(IsEditMode));
+            OnPropertyChanged(nameof(IsDisplayMode));
+        }
+    }
+
+    [NotMapped]
+    public bool IsDisplayMode { get => !IsEditMode; }
 }

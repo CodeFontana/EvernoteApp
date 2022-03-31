@@ -8,7 +8,7 @@
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" 
-        Height="600" Width="900">
+        Height="600" Width="1200">
 
     <Grid>
         <Grid.RowDefinitions>

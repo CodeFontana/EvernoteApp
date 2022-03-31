@@ -11,38 +11,41 @@
              mc:Ignorable="d" 
              d:DesignHeight="50" d:DesignWidth="150">
     
-    <Grid>
-        <TextBlock Text="{Binding Name}" 
+    <Border BorderThickness="2" BorderBrush="White" CornerRadius="2">
+        <Grid>
+            <TextBlock Text="{Binding Name}" 
                    Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext}"
                    Foreground="White"
                    Margin="15"
                    FontSize="20"
                    FontWeight="Bold"
-                   VerticalAlignment="Center">
-            <TextBlock.ContextMenu>
-                <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                    <MenuItem Header="Rename"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding IsDisplayMode, Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                <TextBlock.ContextMenu>
+                    <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                        <MenuItem Header="Rename"
                       Command="{Binding RenameNotebookCommand}"/>
-                    <MenuItem Header="Delete"
+                        <MenuItem Header="Delete"
                       Command="{Binding DeleteNotebookCommand}"/>
-                </ContextMenu>
-            </TextBlock.ContextMenu>
-        </TextBlock>
-        <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
+            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  FontSize="18"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Center"
                  HorizontalContentAlignment="Center"
                  Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="LostFocus">
-                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNotebookCommand}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <TextBox.InputBindings>
-                <KeyBinding Key="Enter" 
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="LostFocus">
+                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNotebookCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" 
                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext.UpdateNotebookCommand}"/>
-            </TextBox.InputBindings>
-        </TextBox>
-    </Grid>
+                </TextBox.InputBindings>
+            </TextBox>
+        </Grid>
+    </Border>
 </UserControl>

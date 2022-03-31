@@ -3,7 +3,7 @@ using WpfUI.ViewModels;
 
 namespace WpfUI.Commands;
 
-public class SaveNoteCommand : CommandBaseAsync
+public class SaveNoteCommand : CommandBase
 {
     private readonly NotesViewModel _notesViewModel;
 
@@ -12,8 +12,8 @@ public class SaveNoteCommand : CommandBaseAsync
         _notesViewModel = notesViewModel;
     }
 
-    public override async Task ExecuteAsync(object parameter)
+    public override void Execute(object parameter)
     {
-        await _notesViewModel.SaveNote();
+        _notesViewModel.SaveNote();
     }
 }

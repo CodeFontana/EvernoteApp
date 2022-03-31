@@ -6,17 +6,30 @@
              xmlns:local="clr-namespace:WpfUI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="300">
-    <StackPanel>
-        <TextBlock Text="{Binding Title}" 
+    <Border BorderThickness="2" 
+            BorderBrush="{StaticResource AlmostBlack}"
+            CornerRadius="5">
+        <StackPanel Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NotesView}}, Path=DataContext}"
+                    Background="{StaticResource TwinkleBlue}">
+            <TextBlock Text="{Binding Title}" 
                    Foreground="Black"
-                   Margin="15"
+                   Margin="10 5 10 5"
                    FontSize="20"
                    FontWeight="Bold"
-                   VerticalAlignment="Center" />
-        <TextBlock Text="{Binding UpdatedAt}" 
-                   Foreground="DodgerBlue"
-                   Margin="15"
+                   VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding UpdatedAt}" 
+                   Foreground="{StaticResource GloomyPurple}"
+                   Margin="10 5 10 5"
                    FontSize="14"
-                   VerticalAlignment="Center" />
-    </StackPanel>
+                   VerticalAlignment="Center"/>
+            <StackPanel.ContextMenu>
+                <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                    <MenuItem Header="Rename"
+                      Command="{Binding RenameNoteCommand}"/>
+                    <MenuItem Header="Delete"
+                      Command="{Binding DeleteNoteCommand}"/>
+                </ContextMenu>
+            </StackPanel.ContextMenu>
+        </StackPanel>
+    </Border>
 </UserControl>
