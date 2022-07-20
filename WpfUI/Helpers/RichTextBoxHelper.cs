@@ -42,8 +42,16 @@ public class RichTextBoxHelper : DependencyObject
                 try
                 {
                     MemoryStream stream = new(Encoding.UTF8.GetBytes(GetDocumentXaml(richTextBox)));
-                    FlowDocument doc = (FlowDocument)XamlReader.Load(stream);
-                    richTextBox.Document = doc;
+
+                    if (stream is not null && stream.Length > 0)
+                    {
+                        FlowDocument doc = (FlowDocument)XamlReader.Load(stream);
+                        richTextBox.Document = doc;
+                    }
+                    else
+                    {
+                        richTextBox.Document = new FlowDocument();
+                    }
                 }
                 catch (Exception)
                 {
