@@ -37,10 +37,10 @@ public partial class App : Application
                     {
                         options.UseSqlite($@"Data Source={Environment.CurrentDirectory}\Notes.db;");
                     });
-                    services.AddScoped(sp => new NotesDbContextFactory($@"Data Source={Environment.CurrentDirectory}\Notes.db;"));
-                    services.AddScoped<NotesRepositoryFactory>();
-                    services.AddScoped<MainViewModel>();
-                    services.AddScoped(sp => new MainWindow(sp.GetRequiredService<MainViewModel>()));
+                    services.AddTransient(sp => new NotesDbContextFactory($@"Data Source={Environment.CurrentDirectory}\Notes.db;"));
+                    services.AddTransient<NotesRepositoryFactory>();
+                    services.AddTransient<MainViewModel>();
+                    services.AddSingleton(sp => new MainWindow(sp.GetRequiredService<MainViewModel>()));
                 })
                 .UseSerilog((context, services, loggerConfiguration) =>
                     loggerConfiguration.ReadFrom.Configuration(context.Configuration))
