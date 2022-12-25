@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
-using System.IO;
 using System.Windows;
 using WpfUI.ViewModels;
 
@@ -19,18 +18,7 @@ public partial class App : Application
     {
         try
         {
-            string env = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
-            bool isDevelopment = string.IsNullOrEmpty(env) || env.ToLower() == "development";
-
             _appHost = Host.CreateDefaultBuilder()
-                .ConfigureAppConfiguration(config =>
-                {
-                    config.SetBasePath(Directory.GetCurrentDirectory());
-                    config.AddJsonFile("appsettings.json", true, true);
-                    config.AddJsonFile($"appsettings.{env}.json", true, true);
-                    config.AddUserSecrets<App>(optional: true);
-                    config.AddEnvironmentVariables();
-                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddDbContext<NotesDbContext>(options =>
